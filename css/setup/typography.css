@@ -21,7 +21,16 @@
 /* Font Awesome */
 @font-face {
     font-family: fa;
-    src: url(../../fonts/FontAwesome/fa-brands-400.ttf);
+    src: url(../../fonts/FontAwesome/fa-brands-400.ttf),
+         url(../../fonts/FontAwesome/fa-regular-400.ttf),
+         url(../../fonts/FontAwesome/fa-solid-900.ttf),
+         url(../../fonts/FontAwesome/fa-v4compatibility.ttf);
+
+}
+
+@font-face {
+    font-family: fa-solid;
+    src: url(../../fonts/FontAwesome/fa-solid-900.ttf);
 }
 
 /* Font Awesome */
@@ -37,5 +46,16 @@
 /* bars */
 .fa.bars::before {
     content: '\f0c9';
+}
+
+.fa.search::before {
+    content: '\f002';
+}
+
+.fa-solid.fa-arrow-left::before {
+    font-family: fa-solid;
+    content: '\f060';
+    font-style: normal;
+
 }
 

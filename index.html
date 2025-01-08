@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/main.css" />
     </head>
 
-    <body onload="onInit()">
+    <body onload="onAppInit()">
 
         <header class="main-header padded-left-right">      
             <div class="flex space-between">
@@ -20,9 +20,9 @@
 
                 <nav class="main-nav flex align-center">
                     <ul class="flex clean-list flex align-center">
-                        <li><a href="#">Gallery</a></li>
-                        <li><a href="#">Memes</a></li>
-                        <li><a href="#">About</a></li>
+                        <li class="top-bar-active gallery-nav" onclick="onBackToGallery()"><a href="#">Gallery</a></li>
+                        <li class="editor-nav"><a href="#">Memes</a></li>
+                        <li class="about-nav"><a href="#">About</a></li>
                         <span class="hamburger" onclick="onToggleMenu()">☰</span>
                     </ul>
                 </nav>
@@ -34,144 +34,314 @@
 
             <div class = "work-area">
 
-                <div class="controls">
+                <div class="page-editor">
 
-                    <input class="color-picker" type="color" id="color-picker" value="#000000" onchange="onColorChange(event)" />
+                    <div class="controls">
 
-                    <select class="brush-size" onchange="onBrushSizeChange(event)">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10" selected>10</option>
-                    </select>
+                        <button class="back-btn" onclick="onBackToGallery()"> <i class="fa-solid fa-arrow-left"> </i> Back</button>
 
-                    <select class="brush-shape" onchange="onBrushShapeChange(event)">
-                        <option value="circle">Round</option>
-                        <option value="square">Square</option>
-                    </select>
+                        <input class="color-picker" type="color" id="color-picker" value="#000000" onchange="onColorChange(event)" />
 
-                    <button class="clear" onclick="onClear(event)">Clear</button>
+                        <select class="brush-size" onchange="onBrushSizeChange(event)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10" selected>10</option>
+                        </select>
 
-                    <input type="file" id="imgupload" text="Upload Image" accept="image/*" onChange="onUploadBackground(event)"  />
-                    
-                    
-                </div>       
-        
-                <div class="canvas-container">
-                
-                    <canvas 
-                            
-                            width="400"
-                            height="400"
-                            
-                            onmouseup="onEvent(event)"
-                            onmousedown="onEvent(event)"
-                            onmousemove="onEvent(event)"    
+                        <select class="brush-shape" onchange="onBrushShapeChange(event)">
+                            <option value="circle">Round</option>
+                            <option value="square">Square</option>
+                        </select>
 
-                            ontouchend="onEvent(event)"
-                            ontouchmove="onEvent(event)"
-                            ontouchstart="onEvent(event)"
+                        <button class="clear" onclick="onClear(event)">Clear</button>
 
-                            >
+                        <input type="file" id="imgupload" text="Upload Image" accept="image/*" onChange="onUploadBackground(event)"  />
 
-                    </canvas>           
 
+                    </div>
+                    <div class="canvas-container">
+
+                        <canvas
+
+                                width="400"
+                                height="400"
+
+                                onmouseup="onEvent(event)"
+                                onmousedown="onEvent(event)"
+                                onmousemove="onEvent(event)"
+
+                                ontouchend="onEvent(event)"
+                                ontouchmove="onEvent(event)"
+                                ontouchstart="onEvent(event)"
+
+                                >
+
+                        </canvas>
+
+                    </div>
+
+                    <!-- <div class="export">
+
+                        <div class = "buttons">
+                            <h3>Export</h3>
+                            <a class="btn download" onclick="onDownload(this, event)">Download</a>
+                            <a class="btn upload" onclick="onUpload(this, event)">Upload to Cloud</a>
+                        </div>
+
+                        <div class="gallery">
+                            <h3>Exported</h3>
+                            <ul class="gallery-list">
+
+                            </ul>
+
+                        </div>
+
+                    </div> -->
                 </div>
 
-                <!-- <div class="export">
+                <div class="page-gallery">
 
-                    <div class = "buttons">                
-                        <h3>Export</h3>
-                        <a class="btn download" onclick="onDownload(this, event)">Download</a>                
-                        <a class="btn upload" onclick="onUpload(this, event)">Upload to Cloud</a>
+                    <div class="gallery-top-bar">
+
+
+<!--                        <div class="heading">Pick Template</div>-->
+
+
+                        <div class="search-bar">
+                            <input type="text" placeholder="" />
+                        </div>
+
+<!--                        <div class="filter-bar">-->
+<!--                            <button class="filter-btn">All</button>-->
+<!--                            <button class="filter-btn">Funny</button>-->
+<!--                            <button class="filter-btn">Animals</button>-->
+<!--                            <button class="filter-btn">Movies</button>-->
+<!--                            <button class="filter-btn">Politics</button>-->
+<!--                            <button class="filter-btn">Sports</button>-->
+<!--                        </div>-->
+
+
+
+
+<!--                        <div class="actions">-->
+<!--                            <button class="filter-btn btn btn-add">-->
+<!--                                <div class="button-icon">-->
+<!--                                    <svg width="24px" height="20px" viewBox="0 0 24 20">-->
+<!--                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">-->
+<!--                                            <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">-->
+<!--                                                <g transform="translate(736.000000, 1133.000000)">-->
+<!--                                                    <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>-->
+<!--                                                    <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>-->
+<!--                                                    <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>-->
+<!--                                                </g>-->
+<!--                                            </g>-->
+<!--                                        </g>-->
+<!--                                    </svg>-->
+<!--                                </div>-->
+<!--                                <span>Upload</span>-->
+<!--                            </button>-->
+
+<!--                        </div>-->
+
+<!--                        <h3>Choose Template</h3>-->
+
+<!--                        <div class="search-bar">-->
+<!--                            <input type="text" placeholder="Search" />-->
+<!--                            <button>Search</button>-->
+<!--                        </div>-->
+
+<!--                        <div class="filter-bar">-->
+<!--                            <button class="filter-btn">All</button>-->
+<!--                            <button class="filter-btn">Funny</button>-->
+<!--                            <button class="filter-btn">Animals</button>-->
+<!--                            <button class="filter-btn">Movies</button>-->
+<!--                            <button class="filter-btn">Politics</button>-->
+<!--                            <button class="filter-btn">Sports</button>-->
+<!--                        </div>-->
+
+<!--                        <div class="upload-btn">-->
+<!--                            <button>Upload</button>-->
+<!--                        </div>-->
+
+
                     </div>
 
-                    <div class="gallery">
-                        <h3>Exported</h3>
-                        <ul class="gallery-list">
-
-                        </ul>
-
+                    <div class="scrollable">
+                        <section class="grid-container">
+                            <img src="./img/1.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/2.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/3.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/4.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/5.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/6.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/7.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/8.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/9.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/10.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/11.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/12.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/13.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/14.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/15.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/16.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/17.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/18.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/1.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/2.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/3.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/4.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/5.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/6.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/7.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/8.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/9.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/10.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/11.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/12.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/13.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/14.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/15.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/16.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/17.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                            <img src="./img/18.jpg" alt="" onclick="onSelectedTemplate(event, this)">
+                        </section>
                     </div>
+                </div>
 
-                </div> -->
             </div>
 
-            
-
             <div class ="side-bar">
-            
-                <div class="side-container">
 
-                    <div class ="side-header">
-                        <div>Meme editor</div>
-                    </div>
 
-                    <button class="btn btn-add">
-                        <div class="button-icon">
-                            <svg width="24px" height="20px" viewBox="0 0 24 20">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">
-                                        <g transform="translate(736.000000, 1133.000000)">
-                                            <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>
-                                            <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>
-                                            <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
+                    <div class="side-page-gallery">
+
+                        <div class ="side-header">
+                            <div>Main Menu</div>
+                        </div>
+
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg width="24px" height="20px" viewBox="0 0 24 20">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">
+                                            <g transform="translate(736.000000, 1133.000000)">
+                                                <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>
+                                                <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>
+                                                <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
+                                            </g>
                                         </g>
                                     </g>
-                                </g>
-                            </svg>
+                                </svg>
+                            </div>
+
+                            <span>Upload New</span>
+                        </button>
+
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg width="24px" height="20px" viewBox="0 0 24 20">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">
+                                            <g transform="translate(736.000000, 1133.000000)">
+                                                <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>
+                                                <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>
+                                                <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <span>Your Memes</span>
+                        </button>
+
+                    </div>
+
+                    <div class="side-page-editor">
+
+                        <div class ="side-header">
+                            <div>Meme Editor</div>
                         </div>
-                        <span>Add image</span>
-                    </button>
 
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M15.8787 3.70705C17.0503 2.53547 18.9498 2.53548 20.1213 3.70705L20.2929 3.87862C21.4645 5.05019 21.4645 6.94969 20.2929 8.12126L18.5556 9.85857L8.70713 19.7071C8.57897 19.8352 8.41839 19.9261 8.24256 19.9701L4.24256 20.9701C3.90178 21.0553 3.54129 20.9554 3.29291 20.7071C3.04453 20.4587 2.94468 20.0982 3.02988 19.7574L4.02988 15.7574C4.07384 15.5816 4.16476 15.421 4.29291 15.2928L14.1989 5.38685L15.8787 3.70705ZM18.7071 5.12126C18.3166 4.73074 17.6834 4.73074 17.2929 5.12126L16.3068 6.10738L17.8622 7.72357L18.8787 6.70705C19.2692 6.31653 19.2692 5.68336 18.8787 5.29283L18.7071 5.12126ZM16.4477 9.13804L14.8923 7.52185L5.90299 16.5112L5.37439 18.6256L7.48877 18.097L16.4477 9.13804Z" ></path> </g></svg>
+                            </div>
+                            <span>Paint Tool</span>
+                        </button>
 
-                    <button class="btn btn-add">
-                        <div class="button-icon">
-                            <svg width="53px" height="42px" viewBox="0 0 53 42">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <g transform="translate(-1128.000000, -219.000000)" fill="white">
-                                        <g transform="translate(1094.000000, 195.000000)">
-                                            <g>
-                                                <g transform="translate(34.000000, 24.000000)">
-                                                    <rect id="Rectangle-23" x="0" y="37" width="53" height="4.58024691" rx="2.268"></rect>
-                                                    <path d="M24.8461538,0 L13,30.6043771 L17.8461538,30.6043771 L20.2584615,24.0462963 L33.72,24.0462963 L36.1323077,30.6043771 L40.9784615,30.6043771 L29.1538462,0 L24.8461538,0 L24.8461538,0 Z M21.8738462,19.6742424 L27,5.83669192 L32.1261538,19.6742424 L21.8738462,19.6742424 L21.8738462,19.6742424 Z" id="Shape"></path>
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg width="53px" height="42px" viewBox="0 0 53 42">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g transform="translate(-1128.000000, -219.000000)" fill="white">
+                                            <g transform="translate(1094.000000, 195.000000)">
+                                                <g>
+                                                    <g transform="translate(34.000000, 24.000000)">
+                                                        <rect id="Rectangle-23" x="0" y="37" width="53" height="4.58024691" rx="2.268"></rect>
+                                                        <path d="M24.8461538,0 L13,30.6043771 L17.8461538,30.6043771 L20.2584615,24.0462963 L33.72,24.0462963 L36.1323077,30.6043771 L40.9784615,30.6043771 L29.1538462,0 L24.8461538,0 L24.8461538,0 Z M21.8738462,19.6742424 L27,5.83669192 L32.1261538,19.6742424 L21.8738462,19.6742424 L21.8738462,19.6742424 Z" id="Shape"></path>
+                                                    </g>
                                                 </g>
                                             </g>
                                         </g>
                                     </g>
-                                </g>
-                            </svg>
+                                </svg>
+                            </div>
+                            <span>Add Text</span>
+                        </button>
+
+
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg width="24px" height="20px" viewBox="0 0 24 20">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">
+                                            <g transform="translate(736.000000, 1133.000000)">
+                                                <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>
+                                                <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>
+                                                <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span>Add Stickers</span>
+                        </button>
+
+                        <button class="btn btn-add">
+                            <div class="button-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M2 7C2 4.79086 3.79086 3 6 3H9H15H18C20.2091 3 22 4.79086 22 7V10V15V18C22 20.2091 20.2091 22 18 22H15H9H6C3.79086 22 2 20.2091 2 18V15V10V7ZM6 5C4.89543 5 4 5.89543 4 7V7.58579L6.58579 5H6ZM9.41421 5L4 10.4142V14.5858L9.41421 20H14.5858L20 14.5858V10.4142L14.5858 5H9.41421ZM17.4142 5L20 7.58579V7C20 5.89543 19.1046 5 18 5H17.4142ZM20 17.4142L17.4142 20H18C19.1046 20 20 19.1046 20 18V17.4142ZM6.58579 20L4 17.4142V18C4 19.1046 4.89543 20 6 20H6.58579Z" ></path> </g></svg>
+                            </div>
+                            <span>Filters</span>
+                        </button>
+
+
+
+                        <div>
+                            <button class="btn bottom-btn">
+                                <span>
+                                    Export MEME
+                                </span>
+                                <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="24" height="24" fill="#FFF" fill-rule="evenodd">
+                                            <path d="M13 26C5.82 26 0 20.18 0 13S5.82 0 13 0s13 5.82 13 13-5.82 13-13 13zm0-2c6.075 0 11-4.925 11-11S19.075 2 13 2 2 6.925 2 13s4.925 11 11 11z" fill-rule="nonzero"></path>
+                                            <path d="M18.684 13.105a.55.55 0 0 1-.148.378l-5.263 5.263a.55.55 0 0 1-.378.148.54.54 0 0 1-.526-.526V15.21H7.842a.54.54 0 0 1-.526-.526v-3.158A.54.54 0 0 1 7.842 11h4.526V7.842a.52.52 0 0 1 .526-.526c.148 0 .28.066.395.164l5.247 5.247a.55.55 0 0 1 .148.378z"></path>
+                                        </svg>
+                                </span>
+                            </button>
                         </div>
-                        <span>Add text</span>
-                    </button>
-                </div>
-
-                <div>
-                    <button class="btn bottom-btn">
-
-                            <span>
-                                Export MEME
-                            </span>
-
-                            <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="24" height="24" fill="#FFF" fill-rule="evenodd">
-                                        <path d="M13 26C5.82 26 0 20.18 0 13S5.82 0 13 0s13 5.82 13 13-5.82 13-13 13zm0-2c6.075 0 11-4.925 11-11S19.075 2 13 2 2 6.925 2 13s4.925 11 11 11z" fill-rule="nonzero"></path>
-                                        <path d="M18.684 13.105a.55.55 0 0 1-.148.378l-5.263 5.263a.55.55 0 0 1-.378.148.54.54 0 0 1-.526-.526V15.21H7.842a.54.54 0 0 1-.526-.526v-3.158A.54.54 0 0 1 7.842 11h4.526V7.842a.52.52 0 0 1 .526-.526c.148 0 .28.066.395.164l5.247 5.247a.55.55 0 0 1 .148.378z"></path>
-                                    </svg>
-                            </span>
-
-                    </button>
 
 
+                    </div>
 
 
-                </div>
 
             </div>
 
@@ -181,9 +351,11 @@
         </main>
 
 
+    <script src="js/services/utilService.service.js"></script>
 
-    <script src="js/main.js"></script>
-
+    <script src="js/controllers/app.controller.js"></script>
+    <script src="js/controllers/template-picker.controller.js"></script>
+    <script src="js/controllers/meme-editor.controller.js"></script>
     </body>
 
 </html>
