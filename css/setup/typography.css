@@ -1,0 +1,41 @@
+
+
+/* Eurofurence Regular */
+@font-face {
+    font-family: euro;
+    src: url(../../fonts/Eurofurence/Eurofurence-Regular.ttf);
+}
+
+/* Lato-Regular */
+@font-face {
+    font-family: lato-regular;
+    src: url(../../fonts/Lato/Lato-Regular.ttf);
+}
+
+/* Lato-Bold */
+@font-face {
+    font-family: lato-bold;
+    src: url(../../fonts/Lato/Lato-Bold.ttf);
+}
+
+/* Font Awesome */
+@font-face {
+    font-family: fa;
+    src: url(../../fonts/FontAwesome/fa-brands-400.ttf);
+}
+
+/* Font Awesome */
+.fa::before {
+    font-family: fa;
+}
+
+
+.fa.facebook::before {
+    content: '\f39e';
+}
+
+/* bars */
+.fa.bars::before {
+    content: '\f0c9';
+}
+

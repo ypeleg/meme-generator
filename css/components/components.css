@@ -1,0 +1,472 @@
+
+
+:root {
+
+    /* Colors */
+
+
+    /* Layout */
+    --layoutpadding: 30px;
+
+
+}
+
+
+
+
+/* Helpers */
+.flex {
+    display: flex;
+}
+
+.flex.align-center {
+    align-items: center;
+}
+
+.flex.space-between {
+    justify-content: space-between;
+}
+
+
+/* List Helpers */
+.clean-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+.full {
+    grid-column: 1 / -1;
+}
+/* Helpers */
+
+
+
+
+
+
+
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    min-height: 100vh;
+    background-color: #f5f5fa;
+}
+
+header {
+    display: grid;
+    grid-template-columns:
+        var(--layoutpadding)
+        1fr
+        var(--layoutpadding);
+}
+
+header>* {
+    grid-column: 2;
+}
+
+.main-header {    
+    top: 0;
+    position: fixed;   
+    background-color: #ffffff;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 3px 6px 0 rgba(50,50,50,.3);
+}
+
+.logo {
+    font-family: euro;
+    font-size: 1.9em;
+    color: #4d90fe;
+}
+
+.hamburger {
+    font-size: 1.5em;
+    color: #161616;
+}
+
+nav li {
+    list-style-type: none;
+    padding: 0.4em 0.9em;
+    /* font-family: euro; */
+    font-family: lato-bold;
+    color: black;
+    font-size: 1.0em;
+    text-align: center;
+    cursor: pointer;
+}
+
+nav li:hover {
+    background-color: #4d90fe;
+    color: white;
+    border-radius: 8px;
+}
+
+nav ul li:last-of-type {
+    margin-right: 30px;
+}
+
+
+
+.main-layout {
+    width: 100%;
+    display: flex;    
+    margin-top: 60px; 
+    height: calc(100vh - 60px);
+}
+
+
+
+/* side bar */
+
+.side-bar {    
+    background-color: #ffffff;
+    width: 25%;
+    border-left: 2px solid rgba(0,0,0,.2);
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+}
+
+.side-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: stretch;
+    row-gap: 0.5em;
+}
+
+.side-header {
+    width: 100%;
+    padding-block: 0.5em;    
+    border-bottom: #cccccc 1px solid;
+    text-align: center;
+    font-family: euro;
+    font-size: 1.6em;        
+    font-family: lato-bold;
+    margin-bottom: 0.6em;
+    color:#161616;
+    letter-spacing: 0.08em;
+}
+
+
+
+
+
+/* editor - side bar */
+.work-area {
+    width: 75%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f5f5fa;
+}
+
+.canvas-container {
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    aspect-ratio: 1/1;
+    background-color: #f5f5fa;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.3);
+}
+
+/* side bar buttons */
+.btn-add {
+
+    height: 50px;
+
+    width: 70%;
+    padding: 0;
+    border: none;
+    color:#161616;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #f5f5fa;
+
+    display: flex;
+    font-size: 1.1em;
+    align-items: center;
+    letter-spacing: 0.08em;
+    justify-content: start;
+    text-transform: uppercase;
+    font-family: euro, monospace;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,.14);
+}
+
+.btn-add .button-icon {
+    width: 20%;
+    height: 100%;
+    color: white;
+    font-size: 1.5em;
+    margin-inline-end: 0.5em;
+    background-color: #4d90fe;
+    border-radius: 8px 0 0 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}   
+
+.btn-add svg {
+    width: 100%;
+    height: 100%;
+    max-height: 25px;
+    max-width: 25px;
+    fill: #fff;
+}
+
+/* editor - side bar */
+
+
+
+
+
+
+
+
+/* editor - working area */
+.work-area {
+    width: 75%;  
+    height: 100%;  
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f5f5fa;
+}
+
+.canvas-container {    
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    aspect-ratio: 1/1;
+    background-color: #f5f5fa;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.3);
+}
+/* editor - working area */
+
+
+
+
+
+
+/* editor - controls */
+.controls {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 90%;
+    height: 5em;
+    margin-inline: auto;
+
+    display: none;
+
+}
+
+.controls>*{
+    margin-inline: auto;
+}
+
+.export {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+
+    width: 90%;
+    margin-top: 1em;
+    column-gap: 3em;
+    margin-bottom: 3em;
+    
+}
+
+.export .buttons {
+    width: 20%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    row-gap: 1em;
+    text-align: center;
+    
+}
+
+.export .gallery {
+    width: 60%;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: start;
+
+}
+
+
+
+
+.gallery-list img {
+    width: 100%;
+    margin-bottom: 3em;
+    border: 1px solid black;
+}
+
+
+.btn{
+    cursor: pointer;
+}
+
+.btn:hover {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.4);
+}
+
+
+/* VERY USEFUL TRICK! */
+/*  "PARENT-OF SELECTOR" parent-selected:has(> .by-having-a-child-with-a-class) */
+/* TODO: add this 'parent selector' to my summary notes  */
+
+
+div:has(> .bottom-btn) {
+    row-gap: 1em;
+    height: 100%;
+    display: flex;
+    padding: 1em 0;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.bottom-btn {
+    bottom: 0;
+    width: 85%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 1em;
+    height: 55px;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,.14);
+    /*box-shadow: 0 1px 6px 0 rgba(50,50,50,.3);*/
+    border: none;
+    border-radius: 0.8em;
+
+    background-color: #4d90fe;
+    color: white;
+
+    font-size: 1.3em;
+    font-weight: bold;
+
+    letter-spacing: 0.08em;
+
+
+}
+
+.bottom-btn > span {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+.modal {    
+    inset: 0;
+    /* display: none; */
+    
+    margin: auto;
+    position: fixed;
+
+
+    /* width: max-content; */
+    margin: 0 auto; /* Without this, will be left-aligned */
+
+    display: grid;
+    
+    align-items: center;
+    justify-items: center;
+
+    align-content: center;
+    justify-content: center;
+   
+
+    grid-template-rows: minmax(20px, 1fr) minmax(auto, 800px) minmax(20px, 1fr);
+    grid-template-columns: minmax(20px, 1fr) minmax(auto, 800px) minmax(20px, 1fr);
+
+    
+    z-index: 2;
+
+
+    pointer-events: none;
+    opacity: 0;   
+    transition: opacity 0.8s;
+    
+    
+}
+
+body.modal-open .modal {
+    pointer-events: none; 
+    opacity: 1;
+    z-index: 3;
+}
+
+body.modal-open .modal .modal-content {
+    pointer-events: auto;
+}
+
+body.menu-open header {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
+.main-screen {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .6);
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+
+    transition: opacity .8s;
+
+    /* WHY?! */
+    z-index: 1;
+}
+
+body.modal-open .main-screen ,
+body.menu-open  .main-screen {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: auto;
+
+    z-index: 2;
+}
+
+
+
+
