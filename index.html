@@ -273,6 +273,23 @@
                         </div>
 
 
+                        <div class = "editable-texts">
+
+
+                            <div class="editable-text" data-text-idx="1" onclick="onClickedEditableText(this, event)" onfocusout="hideAllToolbars()">
+                                <input class="editable-text-1" type="text" placeholder="" oninput="onTextChange(event)"/>
+                            </div>
+
+                            <div class="editable-text" data-text-idx="2" onclick="onClickedEditableText(this, event)" onfocusout="hideAllToolbars()">
+                                <input class="editable-text-2" type="text" placeholder="" oninput="onTextChange(event)" />
+                            </div>
+
+
+                            <!-- text inputs -->
+<!--                            <input type = "text" class = "side-page-editor-text-input" placeholder = "one does not simply.."-->
+<!--                                   oninput="onTextChange(event)" />-->
+                        </div>
+
 
                         <button class="btn btn-add">
                             <div class="button-icon">
@@ -294,23 +311,22 @@
                             <span>Add Text</span>
                         </button>
 
-
-                        <button class="btn btn-add">
-                            <div class="button-icon">
-                                <svg width="24px" height="20px" viewBox="0 0 24 20">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">
-                                            <g transform="translate(736.000000, 1133.000000)">
-                                                <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>
-                                                <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>
-                                                <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </svg>
-                            </div>
-                            <span>Add Stickers</span>
-                        </button>
+<!--                        <button class="btn btn-add">-->
+<!--                            <div class="button-icon">-->
+<!--                                <svg width="24px" height="20px" viewBox="0 0 24 20">-->
+<!--                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">-->
+<!--                                        <g transform="translate(-736.000000, -1133.000000)" fill="#FFFFFF">-->
+<!--                                            <g transform="translate(736.000000, 1133.000000)">-->
+<!--                                                <path d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z" id="Combined-Shape"></path>-->
+<!--                                                <path d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z" id="Combined-Shape"></path>-->
+<!--                                                <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>-->
+<!--                                            </g>-->
+<!--                                        </g>-->
+<!--                                    </g>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <span>Add Stickers</span>-->
+<!--                        </button>-->
 
                         <!--                        <button class="btn btn-add">-->
                         <!--                            <div class="button-icon">-->
@@ -319,18 +335,33 @@
                         <!--                            <span>Filters</span>-->
                         <!--                        </button>-->
 
-                        <div>
-                            <a class="btn bottom-btn" onclick="onDownload(this, event)">
-                                <span>
-                                    Export MEME
-                                </span>
-                                <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="24" height="24" fill="#FFF" fill-rule="evenodd">
-                                            <path d="M13 26C5.82 26 0 20.18 0 13S5.82 0 13 0s13 5.82 13 13-5.82 13-13 13zm0-2c6.075 0 11-4.925 11-11S19.075 2 13 2 2 6.925 2 13s4.925 11 11 11z" fill-rule="nonzero"></path>
-                                            <path d="M18.684 13.105a.55.55 0 0 1-.148.378l-5.263 5.263a.55.55 0 0 1-.378.148.54.54 0 0 1-.526-.526V15.21H7.842a.54.54 0 0 1-.526-.526v-3.158A.54.54 0 0 1 7.842 11h4.526V7.842a.52.52 0 0 1 .526-.526c.148 0 .28.066.395.164l5.247 5.247a.55.55 0 0 1 .148.378z"></path>
-                                        </svg>
-                                </span>
-                            </a>
+                        <div class = "bottom-container">
+
+                            <div class ="side-container">
+
+                                <a class="btn bottom-btn" onclick="onDownload(this, event)">
+                                    <span>
+                                        Save MEME
+                                    </span>
+                                    <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="24" height="24" fill="#FFF" fill-rule="evenodd">
+                                                <path d="M13 26C5.82 26 0 20.18 0 13S5.82 0 13 0s13 5.82 13 13-5.82 13-13 13zm0-2c6.075 0 11-4.925 11-11S19.075 2 13 2 2 6.925 2 13s4.925 11 11 11z" fill-rule="nonzero"></path>
+                                                <path d="M18.684 13.105a.55.55 0 0 1-.148.378l-5.263 5.263a.55.55 0 0 1-.378.148.54.54 0 0 1-.526-.526V15.21H7.842a.54.54 0 0 1-.526-.526v-3.158A.54.54 0 0 1 7.842 11h4.526V7.842a.52.52 0 0 1 .526-.526c.148 0 .28.066.395.164l5.247 5.247a.55.55 0 0 1 .148.378z"></path>
+                                            </svg>
+                                    </span>
+                                </a>
+
+                                <div class = "side-container-inner">
+
+                                    <a class="btn-side" onclick="onShareOnFacebook(this, event)">
+                                        <i class="fa facebook"></i>
+                                    </a>
+                                    <a class="btn-side" onclick="onDownload(this, event)">
+                                        <i class="fa download"></i>
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
             </div>
@@ -342,20 +373,28 @@
             <div class="editor-container">
                 <div class="toolbar">
                     <div class="toolbar-group">
-                        <button class="toolbar-button">impact</button>
+                        <select class="toolbar-button font-change-select" onchange="onFontChange(event)">
+                            <option value="impact" selected>impact</option>
+                            <option value="arial">arial</option>
+                            <option value="times new roman">times new roman</option>
+                        </select>
                     </div>
                     <div class="toolbar-group">
-                        <button class="toolbar-button">A-</button>
-                        <button class="toolbar-button">A+</button>
+                        <input class="color-picker" type="color" id="color-picker" value="#000000" onchange="onColorChange(event)" oninput="onColorChange(event)" />
                     </div>
                     <div class="toolbar-group">
-                        <button class="toolbar-button"><strong>B</strong></button>
-                        <button class="toolbar-button"><em>I</em></button>
-                        <button class="toolbar-button"><u>U</u></button>
+                        <button class="toolbar-button" onclick="onFontSizeChange(event)">A-</button>
+                        <button class="toolbar-button" onclick="onFontSizeChange(event)">A+</button>
                     </div>
                     <div class="toolbar-group">
-                        <button class="toolbar-button"><i class="fa-solid fa-align-left"></i></button>
-                        <button class="toolbar-button"><i class="fa-solid fa-align-right"></i></button>
+                        <button class="toolbar-button" onclick="onBold(event)"><strong>B</strong></button>
+                        <button class="toolbar-button" onclick="onItalic(event)"><em>I</em></button>
+                        <button class="toolbar-button disabled-btn" disabled><u>U</u></button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-button" onclick="onRtl(event)"><i class="fa-solid fa-align-left"></i></button>
+                        <button class="toolbar-button" onclick="onCenter(event)"><b>☰</b></button>
+                        <button class="toolbar-button" onclick="onLtr(event)"><i class="fa-solid fa-align-right"></i></button>
                     </div>
 
                 </div>

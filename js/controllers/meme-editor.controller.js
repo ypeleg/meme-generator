@@ -1,15 +1,26 @@
 'use strict'
 
 
+// TODO: Things I dont understand well:
+// "this"..
+// any better way to do OOP
+
+
+// TODO: Known Bugs:
+// When clicking on the back button, remove the menu
+// Add another upper button for "saved memes and for editor"
+// The clear button doesnt add the texts again
+// drag is from the "middle"
+//
+
 
 let gCtx
 let gElCanvas
 var gShapesDrawn = []
-var gMouseDown = false 
+var gMouseDown = false
 var gBackgroundImg = null
 
 var gElToolbar = document.querySelector('.context-toolbar')
-
 
 
 // Canvas "utils"
@@ -23,15 +34,11 @@ function drawCanvasFrame() {
 }
 
 function renderImg(img) {
-    gBackgroundImg = img    
+    gBackgroundImg = img
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
+
 // Canvas "utils"
-
-
-
-
-
 
 
 // TODO: move to  'Generic Shapes'
@@ -40,11 +47,15 @@ function extend(obj1, obj2) {
         if (!(key === 'callbackFuncs')) {
             obj1[key] = obj2[key]
         } else {
-            if (obj1[key] === undefined) { obj1[key] = {} }
+            if (obj1[key] === undefined) {
+                obj1[key] = {}
+            }
             for (let key2 in obj2[key]) {
-                if (obj1[key][key2] === undefined) { obj1[key][key2] = [] }
+                if (obj1[key][key2] === undefined) {
+                    obj1[key][key2] = []
+                }
                 if (typeof obj2[key][key2] === 'function') {
-                obj1[key][key2].push(obj2[key][key2])
+                    obj1[key][key2].push(obj2[key][key2])
                 } else {
                     for (let i = 0; i < obj2[key][key2].length; i++) {
                         obj1[key][key2].push(obj2[key][key2][i])
@@ -56,8 +67,10 @@ function extend(obj1, obj2) {
     return obj1
 }
 
-function abstractShape(x = null, y = null, size = null, color = null) {
+function abstractShape(id = null, x = null, y = null, size = null, color = null) {
     var instance = {
+
+        id: id || gShapesDrawn.length,
 
         x: x || gElCanvas.width / 2,
         y: y || gElCanvas.height / 2,
@@ -95,7 +108,7 @@ function abstractShape(x = null, y = null, size = null, color = null) {
         },
 
         renderCallbacks() {
-            if ( this.callbackFuncs['onrender'] !== undefined ) {
+            if (this.callbackFuncs['onrender'] !== undefined) {
                 for (let i = 0; i < this.callbackFuncs['onrender'].length; i++) {
                     this.callbackFuncs['onrender'][i].call(this)
                 }
@@ -139,7 +152,11 @@ function draggableShape() {
 
 function onTextChange(ev) {
     var text = ev.target.value
-    gShapesDrawn[0].text = text
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].text = text
+
+    document.querySelector('.editable-text-' + (currentSelectedShapeIdx + 1)).value = text
+
     renderCanvas()
 }
 
@@ -153,6 +170,7 @@ function shapeWithToolbar() {
         showToolbar() {
 
             gElToolbar.style.display = 'block'
+            setSelectedShapeIdx(this.id)
             this.isSelected = true
         },
 
@@ -162,10 +180,10 @@ function shapeWithToolbar() {
         },
 
         toolbarOnMouseDown(ev) {
-            if (  (!this.isDragged)  &&  (this.isClickedOn(ev.offsetX, ev.offsetY)) ) {
+            if ((!this.isDragged) && (this.isClickedOn(ev.offsetX, ev.offsetY))) {
                 this.isDragged = true
                 this.hideToolbar()
-            } else if ( !this.isClickedOn(ev.offsetX, ev.offsetY) ) {
+            } else if (!this.isClickedOn(ev.offsetX, ev.offsetY)) {
                 this.hideToolbar()
             }
         },
@@ -182,26 +200,29 @@ function shapeWithToolbar() {
 
             gElToolbar.style.left = x + canvasX + 'px'
             gElToolbar.style.top = y + canvasY + 'px'
-            gElToolbar.style.width = this.getWidth() + 20 + 'px'
+
+            // TODO: Center the toolbar..
+            // gElToolbar.style.width = this.getWidth() + 20 + 'px'
 
             console.log('toolbar moved to', x, y)
 
 
         },
 
-        toolbarOnMouseUp(ev) {
+        moveToolBarToSelf() {
             var padding = 10
+            this.showToolbar()
+            var toolbarHeight = gElToolbar.getBoundingClientRect().height
 
+            document.querySelector('.context-toolbar-text-editor-input').value = this.text
 
-            if (  (this.isDragged)  &&  (this.isClickedOn(ev.offsetX, ev.offsetY)) ) {
-                this.showToolbar()
-                var toolbarHeight = gElToolbar.getBoundingClientRect().height
-                document.querySelector('.context-toolbar-text-editor-input').value = this.text
+            this.moveToolBar(this.x - (this.getWidth() / 2) - padding,
+                this.y - (this.size) - (toolbarHeight) - padding)
+        },
 
-                gElToolbar
-                this.moveToolBar(this.x - (this.getWidth() / 2) - padding,
-                                 this.y - (this.size) - (toolbarHeight) - padding)
-
+        toolbarOnMouseUp(ev) {
+            if ((this.isDragged) && (this.isClickedOn(ev.offsetX, ev.offsetY))) {
+                this.moveToolBarToSelf()
                 this.isDragged = false
             }
         },
@@ -211,16 +232,23 @@ function shapeWithToolbar() {
             if ((this.isSelected) || this.isDragged) {
 
                 var padding = 10
-                gCtx.beginPath()
-                gCtx.setLineDash([5, 5])
-                gCtx.rect(this.x - (this.getWidth() / 2) - padding,
-                                    this.y - (this.size / 2) - padding,
-                                    this.getWidth() + 2 * padding,
-                                    this.size + 2 * padding)
-                gCtx.strokeStyle = 'black'
-                gCtx.lineWidth = 3
-                gCtx.stroke()
 
+                function drawLine(x1, y1, x2, y2, color, offset = 0, dash = [0, 0, 5, 5]) {
+                    gCtx.beginPath()
+                    gCtx.setLineDash(dash)
+                    gCtx.rect(x1 - offset, y1 - offset, x2 + offset, y2 + offset)
+                    gCtx.strokeStyle = color
+                    gCtx.lineWidth = 2
+                    gCtx.stroke()
+                }
+
+                var x1 = this.x - (this.getWidth() / 2) - padding
+                var y1 = this.y - (this.size / 2) - padding
+                var x2 = this.getWidth() + 2 * padding
+                var y2 = this.size + 2 * padding
+
+                drawLine(x1, y1, x2, y2, '#262626', 1, [0, 5, 1])
+                drawLine(x1, y1, x2, y2, '#d8d8cf', 1, [5, 1, 0])
             }
 
         },
@@ -235,18 +263,101 @@ function shapeWithToolbar() {
 
 }
 
+
+
+
+
+
+function onClickedEditableText(el, event) {
+    var currentIdx = el.getAttribute('data-text-idx')
+    setSelectedShapeIdx(parseInt(currentIdx) - 1)
+
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].hideToolbar()
+    }
+
+    gShapesDrawn[currentSelectedShapeIdx].moveToolBarToSelf()
+
+    renderCanvas()
+}
+
+function hideAllToolbars() {
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].hideToolbar()
+    }
+    renderCanvas()
+}
+
+function onFontChange(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].font = event.target.value
+    renderCanvas()
+}
+
+function onColorChange(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].color = event.target.value
+    renderCanvas()
+}
+
+function onFontSizeChange(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    var change = event.target.innerText === 'A+' ? 10 : -10
+    gShapesDrawn[currentSelectedShapeIdx].size += change
+    renderCanvas()
+}
+
+function onBold(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].fontWeight = gShapesDrawn[currentSelectedShapeIdx].fontWeight === 'bold' ? 'normal' : 'bold'
+    renderCanvas()
+}
+
+function onItalic(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].fontStyle = gShapesDrawn[currentSelectedShapeIdx].fontStyle === 'italic' ? 'normal' : 'italic'
+    renderCanvas()
+}
+
+function onLtr(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].textAlign = 'left'
+    renderCanvas()
+}
+
+function onRtl(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].textAlign = 'right'
+    renderCanvas()
+}
+
+function onCenter(event) {
+    var currentSelectedShapeIdx = getSelectedShapeIdx()
+    gShapesDrawn[currentSelectedShapeIdx].textAlign = 'center'
+    renderCanvas()
+}
+
+
+
+
+
 function textShape(text = null, x = null, y = null, size = null, color = null) {
     var text = {
 
         font: 'Impact',
+        textAlign: 'center',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
         text: text || 'Sample Text',
+
 
         isClickedOn(clickX, clickY) {
             gCtx.font = `${this.size}px ${this.font}`
             return (clickX >= this.x - gCtx.measureText(this.text).width / 2 &&
-                    clickX <= this.x + gCtx.measureText(this.text).width / 2 &&
-                    clickY >= this.y - this.size / 2 &&
-                    clickY <= this.y + this.size / 2)
+                clickX <= this.x + gCtx.measureText(this.text).width / 2 &&
+                clickY >= this.y - this.size / 2 &&
+                clickY <= this.y + this.size / 2)
         },
 
         getWidth() {
@@ -254,29 +365,36 @@ function textShape(text = null, x = null, y = null, size = null, color = null) {
         },
 
         renderSelf() {
-            gCtx.font = `${this.size}px ${this.font}`
+
+            var fontStr = `${this.fontStyle} normal ${this.fontWeight} ${this.size}px ${this.font}`
+
+            gCtx.font = fontStr
             gCtx.fillStyle = this.color
-            gCtx.textAlign = 'center'
+            gCtx.textAlign = this.textAlign
             gCtx.textBaseline = 'middle'
+
             gCtx.fillText(this.text, this.x, this.y)
+
         }
     }
-
 
 
     text = extend(text, draggableShape())
 
     text = extend(text, shapeWithToolbar())
 
-    text = extend(text, abstractShape(x, y, size, color))
+    text = extend(text, abstractShape(gShapesDrawn.length, x, y, size, color))
 
 
     gShapesDrawn.push(text)
 }
+
 // TODO: move to  'Generic Shapes'
 
 
-
+function onShareOnFacebook(elLink, event) {
+    return onUpload(elLink, event)
+}
 
 function onDownload(elLink, event) {
     const dataUrl = gElCanvas.toDataURL()
@@ -285,22 +403,25 @@ function onDownload(elLink, event) {
 
 }
 
-function onClear(event)            { onInitMemeEditor() }
+function onClear(event) {
+    onInitMemeEditor()
+}
 
 function renderCanvas() {
     drawCanvasFrame()
-    for(let i = 0; i < gShapesDrawn.length; i++) {
+    for (let i = 0; i < gShapesDrawn.length; i++) {
         gShapesDrawn[i].renderSelf()
         gShapesDrawn[i].renderCallbacks()
 
     }
 }
 
-function onEvent(ev) {   
-    for(let i = 0; i < gShapesDrawn.length; i++) {
+function onEvent(ev) {
+    for (let i = 0; i < gShapesDrawn.length; i++) {
         gShapesDrawn[i].trigger(ev)
     }
-    if (ev.type === 'mousedown') { gMouseDown = true
+    if (ev.type === 'mousedown') {
+        gMouseDown = true
     } else if (ev.type === 'mouseup') {
         gMouseDown = false
     }
@@ -312,13 +433,43 @@ function onEvent(ev) {
 function onUpload(el, event) {
     event.preventDefault()
     const canvasData = gElCanvas.toDataURL('image/jpeg')
+
     function onSuccess(uploadedImgUrl) {
         const encodedUploadedImgUrl = encodeURIComponent(uploadedImgUrl)
         console.log('encodedUploadedImgUrl:', encodedUploadedImgUrl)
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUploadedImgUrl}&t=${encodedUploadedImgUrl}`)
     }
+
     uploadImg(canvasData, onSuccess)
     renderGallery()
+}
+
+function updateTextInputs() {
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        var elTextInput = document.querySelector('.editable-text-' + (i + 1))
+        elTextInput.value = gShapesDrawn[i].text
+        elTextInput.innerText = gShapesDrawn[i].text
+    }
+}
+
+function resetCanvas(){
+    // TODO: Chose dynamiclly the color and size depending on the selected image..
+    textShape('Top Text',
+        gElCanvas.width / 2,
+        70,
+        100,
+        'white')
+
+    textShape('Bottom Text',
+        gElCanvas.width / 2,
+        gElCanvas.height - 70,
+        100,
+        'white')
+
+    updateTextInputs()
+    hideAllToolbars()    
+    renderCanvas()
+
 }
 
 function onInitMemeEditor() {
@@ -329,24 +480,10 @@ function onInitMemeEditor() {
     gElCanvas.height = elContainer.offsetHeight
 
     gCtx = gElCanvas.getContext('2d')
-    
+
     gShapesDrawn = []
-    drawCanvasFrame()
 
-
-    // TODO: Chose dynamiclly the color and size depending on the selected image..
-    textShape('Top Text',
-                gElCanvas.width / 2,
-                70,
-              100,
-             'white')
-
-    textShape('Bottom Text',
-                 gElCanvas.width / 2,
-                 gElCanvas.height - 70,
-               100,
-              'white')
-    
+    resetCanvas()
 }
 
 

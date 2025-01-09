@@ -66,7 +66,7 @@ function onBackToGallery(event, element){
 
     document.querySelector('.top-bar-active').classList.remove('top-bar-active')
     document.querySelector('.gallery-nav').classList.add('top-bar-active')
-
+    hideAllToolbars()
 }
 
 

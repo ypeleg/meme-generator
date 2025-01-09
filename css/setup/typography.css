@@ -33,6 +33,12 @@
     src: url(../../fonts/FontAwesome/fa-solid-900.ttf);
 }
 
+@font-face {
+    font-family: fa-brands;
+    src: url(../../fonts/FontAwesome/fa-brands-400.ttf);
+}
+
+
 /* Font Awesome */
 .fa::before {
     font-family: fa;
@@ -40,8 +46,18 @@
 
 
 .fa.facebook::before {
+    font-family: fa-brands;
     content: '\f39e';
+    font-style: normal;
 }
+
+
+.fa.download::before {
+    font-family: fa-solid;
+    content: '\f019';
+    font-style: normal;
+}
+
 
 /* bars */
 .fa.bars::before {
