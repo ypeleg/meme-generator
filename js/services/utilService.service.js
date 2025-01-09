@@ -16,3 +16,7 @@ function loadFromStorage(key) {
   var val = localStorage.getItem(key)
   return JSON.parse(val)
 }
+
+function randomChoice(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
+}

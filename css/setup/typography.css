@@ -59,3 +59,16 @@
 
 }
 
+.fa-solid.fa-align-left::before {
+    font-family: fa-solid;
+    content: '\f036';
+    font-style: normal;
+}
+
+.fa-solid.fa-align-right::before {
+    font-family: fa-solid;
+    content: '\f038';
+    font-style: normal;
+}
+
+

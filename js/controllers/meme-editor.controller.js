@@ -4,47 +4,15 @@
 
 let gCtx
 let gElCanvas
-
 var gShapesDrawn = []
 var gMouseDown = false 
 var gBackgroundImg = null
 
-let toolSettings = {
-    brushSize: 10,
-    brushColor: 'black',
-    brushShape: 'circle'
-}
+var gElToolbar = document.querySelector('.context-toolbar')
 
 
 
-// utils //
-
-function distanceL2(x1, y1, x2, y2) { return Math.sqrt( (x1 - x2) ** 2 + (y1 - y2) ** 2 ) }
-
-async function uploadImg(imgData, onSuccess) {
-    const CLOUD_NAME = 'webify'
-    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
-    const formData = new FormData()
-    formData.append('file', imgData)
-    formData.append('upload_preset', 'webify')
-    try {
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            body: formData
-        })
-        const data = await res.json()
-        console.log('Cloudinary response:', data)
-        onSuccess(data.secure_url)
-
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-// utils //
-
-
-// Canvas Service
+// Canvas "utils"
 function drawCanvasFrame() {
     if (!gBackgroundImg) {
         gCtx.fillStyle = 'white'
@@ -54,93 +22,293 @@ function drawCanvasFrame() {
     }
 }
 
-function loadImageFromInput(ev, onImageReady) {    
-    const reader = new FileReader()
-    reader.onload = function (event) {
-        const img = new Image()
-        img.onload = () => { onImageReady(img) }
-        img.src = event.target.result
-    }        
-    reader.readAsDataURL(ev.target.files[0])    
-}
 function renderImg(img) {
     gBackgroundImg = img    
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
-
-// Canvas Service
-
+// Canvas "utils"
 
 
 
 
 
 
-/// controller ///
 
-function onBrushSizeChange(event)  { toolSettings.brushSize = event.target.value }
-function onColorChange(event)      { toolSettings.brushColor = event.target.value }
-function onBrushShapeChange(event) { toolSettings.brushShape = event.target.value }
-function onClear(event)            { onInit() }
-
-function onEvent(ev) {   
-    
-    if (ev.type === 'mousedown') {        
-        gMouseDown = true
-    } else if (ev.type === 'mousemove') {
-
-        if (gMouseDown) {
-            gShapesDrawn.push(                
-                {
-                    
-                    _name: 'brushStroke',
-
-                    pos:        { x: ev.offsetX,
-                                  y: ev.offsetY
-                                },                                
-                    size:       toolSettings.brushSize,
-                    color:      toolSettings.brushColor,
-                    brushShape: toolSettings.brushShape,
-            
-                    renderSelf() {   
-
-                        if (this['brushShape'] === 'circle') {
-                            gCtx.beginPath()
-                            gCtx.arc(this['pos']['x'], this['pos']['y'], this['size'], 0, 2 * Math.PI)
-                        } else if (this['brushShape'] === 'square') {
-                            gCtx.fillRect(this['pos']['x'], this['pos']['y'], this['size'], this['size'])
-                        }
-
-                        gCtx.fillStyle = this['color']
-                        gCtx.fill()
-                    
-                    },
+// TODO: move to  'Generic Shapes'
+function extend(obj1, obj2) {
+    for (let key in obj2) {
+        if (!(key === 'callbackFuncs')) {
+            obj1[key] = obj2[key]
+        } else {
+            if (obj1[key] === undefined) { obj1[key] = {} }
+            for (let key2 in obj2[key]) {
+                if (obj1[key][key2] === undefined) { obj1[key][key2] = [] }
+                if (typeof obj2[key][key2] === 'function') {
+                obj1[key][key2].push(obj2[key][key2])
+                } else {
+                    for (let i = 0; i < obj2[key][key2].length; i++) {
+                        obj1[key][key2].push(obj2[key][key2][i])
+                    }
                 }
-            )
+            }
+        }
+    }
+    return obj1
+}
+
+function abstractShape(x = null, y = null, size = null, color = null) {
+    var instance = {
+
+        x: x || gElCanvas.width / 2,
+        y: y || gElCanvas.height / 2,
+
+        size: size || 60,
+        color: color || 'blue',
+
+        moveTo(x, y) {
+            this['x'] = x
+            this['y'] = y
+        },
+
+        callbackFuncs: {},
+
+        registerCallback(self, funcPtr, eventType) {
+
+            if (self.callbackFuncs[eventType] === undefined) {
+                self.callbackFuncs[eventType] = [funcPtr]
+            } else {
+                self.callbackFuncs[eventType].push(funcPtr)
+            }
+        },
+
+        trigger(ev) {
+            if (this.callbackFuncs[ev.type] !== undefined) {
+                for (let i = 0; i < this.callbackFuncs[ev.type].length; i++) {
+
+                    this.callbackFuncs[ev.type][i].call(this, ev)
+
+                }
+            }
+
+            this.renderSelf()
+
+        },
+
+        renderCallbacks() {
+            if ( this.callbackFuncs['onrender'] !== undefined ) {
+                for (let i = 0; i < this.callbackFuncs['onrender'].length; i++) {
+                    this.callbackFuncs['onrender'][i].call(this)
+                }
+            }
         }
 
-    } else if (ev.type === 'mouseup') {
-        gMouseDown = false
     }
-    
-    drawCanvasFrame()
-
-    for(let i = 0; i < gShapesDrawn.length; i++) {
-        gShapesDrawn[i].renderSelf()
-    }
+    return instance
 }
 
 
-// Download
+function draggableShape() {
+
+    var draggable = extend(abstractShape(), {
+
+        isDrag: false,
+
+        onMouseUp(ev) {
+            this.isDrag = false
+        },
+
+        onMouseDown(ev) {
+            if (this.isClickedOn(ev.offsetX, ev.offsetY)) {
+                this.isDrag = true
+            }
+        },
+
+        onMouseMove(ev) {
+            if (this.isDrag) {
+                this.moveTo(ev.offsetX, ev.offsetY)
+            }
+        },
+    })
+
+    draggable.registerCallback(draggable, draggable.onMouseUp, 'mouseup');
+    draggable.registerCallback(draggable, draggable.onMouseDown, 'mousedown');
+    draggable.registerCallback(draggable, draggable.onMouseMove, 'mousemove');
+
+    return draggable
+}
+
+function onTextChange(ev) {
+    var text = ev.target.value
+    gShapesDrawn[0].text = text
+    renderCanvas()
+}
+
+function shapeWithToolbar() {
+
+    var shape = extend(abstractShape(), {
+
+        isDragged: false,
+        isSelected: false,
+
+        showToolbar() {
+
+            gElToolbar.style.display = 'block'
+            this.isSelected = true
+        },
+
+        hideToolbar() {
+            gElToolbar.style.display = 'none'
+            this.isSelected = false
+        },
+
+        toolbarOnMouseDown(ev) {
+            if (  (!this.isDragged)  &&  (this.isClickedOn(ev.offsetX, ev.offsetY)) ) {
+                this.isDragged = true
+                this.hideToolbar()
+            } else if ( !this.isClickedOn(ev.offsetX, ev.offsetY) ) {
+                this.hideToolbar()
+            }
+        },
+
+        toolbarOnMouseMove(ev) {
+            if (this.isDragged) {
+                this.hideToolbar()
+            }
+        },
+
+        moveToolBar(x, y) {
+            var canvasX = gElCanvas.getBoundingClientRect().left
+            var canvasY = gElCanvas.getBoundingClientRect().top
+
+            gElToolbar.style.left = x + canvasX + 'px'
+            gElToolbar.style.top = y + canvasY + 'px'
+            gElToolbar.style.width = this.getWidth() + 20 + 'px'
+
+            console.log('toolbar moved to', x, y)
+
+
+        },
+
+        toolbarOnMouseUp(ev) {
+            var padding = 10
+
+
+            if (  (this.isDragged)  &&  (this.isClickedOn(ev.offsetX, ev.offsetY)) ) {
+                this.showToolbar()
+                var toolbarHeight = gElToolbar.getBoundingClientRect().height
+                document.querySelector('.context-toolbar-text-editor-input').value = this.text
+
+                gElToolbar
+                this.moveToolBar(this.x - (this.getWidth() / 2) - padding,
+                                 this.y - (this.size) - (toolbarHeight) - padding)
+
+                this.isDragged = false
+            }
+        },
+
+        toolbarrenderSelf() {
+
+            if ((this.isSelected) || this.isDragged) {
+
+                var padding = 10
+                gCtx.beginPath()
+                gCtx.setLineDash([5, 5])
+                gCtx.rect(this.x - (this.getWidth() / 2) - padding,
+                                    this.y - (this.size / 2) - padding,
+                                    this.getWidth() + 2 * padding,
+                                    this.size + 2 * padding)
+                gCtx.strokeStyle = 'black'
+                gCtx.lineWidth = 3
+                gCtx.stroke()
+
+            }
+
+        },
+    })
+
+    shape.registerCallback(shape, shape.toolbarOnMouseDown, 'mousedown')
+    shape.registerCallback(shape, shape.toolbarOnMouseMove, 'mousedown')
+    shape.registerCallback(shape, shape.toolbarOnMouseUp, 'mouseup')
+    shape.registerCallback(shape, shape.toolbarrenderSelf, 'onrender')
+
+    return shape
+
+}
+
+function textShape(text = null, x = null, y = null, size = null, color = null) {
+    var text = {
+
+        font: 'Impact',
+        text: text || 'Sample Text',
+
+        isClickedOn(clickX, clickY) {
+            gCtx.font = `${this.size}px ${this.font}`
+            return (clickX >= this.x - gCtx.measureText(this.text).width / 2 &&
+                    clickX <= this.x + gCtx.measureText(this.text).width / 2 &&
+                    clickY >= this.y - this.size / 2 &&
+                    clickY <= this.y + this.size / 2)
+        },
+
+        getWidth() {
+            return gCtx.measureText(this.text).width
+        },
+
+        renderSelf() {
+            gCtx.font = `${this.size}px ${this.font}`
+            gCtx.fillStyle = this.color
+            gCtx.textAlign = 'center'
+            gCtx.textBaseline = 'middle'
+            gCtx.fillText(this.text, this.x, this.y)
+        }
+    }
+
+
+
+    text = extend(text, draggableShape())
+
+    text = extend(text, shapeWithToolbar())
+
+    text = extend(text, abstractShape(x, y, size, color))
+
+
+    gShapesDrawn.push(text)
+}
+// TODO: move to  'Generic Shapes'
+
+
+
+
 function onDownload(elLink, event) {
     const dataUrl = gElCanvas.toDataURL()
     elLink.href = dataUrl
     elLink.download = 'my-img'
 
-    renderGallery()
 }
 
-// Upload to cloud
+function onClear(event)            { onInitMemeEditor() }
+
+function renderCanvas() {
+    drawCanvasFrame()
+    for(let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].renderSelf()
+        gShapesDrawn[i].renderCallbacks()
+
+    }
+}
+
+function onEvent(ev) {   
+    for(let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].trigger(ev)
+    }
+    if (ev.type === 'mousedown') { gMouseDown = true
+    } else if (ev.type === 'mouseup') {
+        gMouseDown = false
+    }
+    renderCanvas()
+}
+
+
+//upload to social media
 function onUpload(el, event) {
     event.preventDefault()
     const canvasData = gElCanvas.toDataURL('image/jpeg')
@@ -152,24 +320,6 @@ function onUpload(el, event) {
     uploadImg(canvasData, onSuccess)
     renderGallery()
 }
-
-// Choose Background
-function onUploadBackground(ev) { loadImageFromInput(ev, renderImg) }
-
-// Render Gallery
-function renderGallery() {
-    const data = gElCanvas.toDataURL()
-    var elGallery = document.querySelector('.gallery-list')
-    elGallery.innerHTML += `<li>
-                                <img src="${data}" alt="canvas-image">
-                            </li>`
-}
-
-/// controller ///
-
-
-
-
 
 function onInitMemeEditor() {
 
@@ -183,7 +333,19 @@ function onInitMemeEditor() {
     gShapesDrawn = []
     drawCanvasFrame()
 
-    console.log('Meme Editor is ready')
+
+    // TODO: Chose dynamiclly the color and size depending on the selected image..
+    textShape('Top Text',
+                gElCanvas.width / 2,
+                70,
+              100,
+             'white')
+
+    textShape('Bottom Text',
+                 gElCanvas.width / 2,
+                 gElCanvas.height - 70,
+               100,
+              'white')
     
 }
 
