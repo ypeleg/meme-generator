@@ -30,89 +30,55 @@ function drawCanvasFrame() {
         gCtx.fillStyle = 'white'
         gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
     } else {
-
-        var imgWidth = gBackgroundImg.width
-        var imgHeight = gBackgroundImg.height
-
-        console.log(gElCanvas.style.aspectRatio, gElCanvas.width, gElCanvas.height)
-
-        var aspectRatio = imgWidth / imgHeight
-        gElCanvas.style.aspectRatio = ''
-
-        // set the canvas width to the aspect ratio of the image
-        // gElCanvas.style.aspectRatio = '1/1'
-        // gElCanvas.style.aspectRatio = aspectRatio
-
         gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.width, gElCanvas.height)
     }
 }
 
 
-var gAdjustedY = 0
-var gAdjustedX = 0
-
 
 // Canvas "utils"
-function drawCaanvasFrame() {
-    // if (!gBackgroundImg) {
-    //     loadSelectedImg()
-    // }
-
+function drawCanvasFram1e() {
     if (!gBackgroundImg) {
         console.log('draw white')
-        // gElCanvas.style.aspectRatio = ''
         gCtx.fillStyle = 'white'
         gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
         console.log('draw white', gElCanvas.width, gElCanvas.height)
-        gAdjustedX = gElCanvas.width
-        gAdjustedY = gElCanvas.width
-        // gElCanvas.style.aspectRatio = 'auto'
     } else {
 
         var imgWidth = gBackgroundImg.width
         var imgHeight = gBackgroundImg.height
-        // var canvasWidth = gElCanvas.width
-        // var canvasHeight = gElCanvas.height
-        // var aspectRatio = imgWidth / imgHeight
+        var canvasWidth = gElCanvas.width
+        var canvasHeight = gElCanvas.height
 
-        // gElCanvas.style.aspectRatio = 'auto'
-        // console.log('draw log: ', imgWidth, imgHeight, canvasWidth, canvasHeight)
+        console.log('draw log: ', imgWidth, imgHeight, canvasWidth, canvasHeight)
+
+
         if (imgWidth > imgHeight) {
-            console.log('adjusting to width')
             gElCanvas.height = gElCanvas.width * imgHeight / imgWidth
             gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.width, gElCanvas.width * imgHeight / imgWidth)
-            gAdjustedY = gElCanvas.width * imgHeight / imgWidth
-            gAdjustedX = gElCanvas.width
-            console.log('adjusted to width', gAdjustedY, gAdjustedX)
         }
         else {
-            console.log('adjusting to height')
             gElCanvas.width = gElCanvas.height * imgWidth / imgHeight
             gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.height * imgWidth / imgHeight, gElCanvas.height)
-            gAdjustedY = gElCanvas.height
-            gAdjustedX = gElCanvas.height * imgWidth / imgHeight
-            console.log('adjusted to height', gAdjustedY, gAdjustedX)
         }
     }
 }
 
-function loadImg(img) {
-    gBackgroundImg = img
-}
-
-function renderImg(img) {
+function renderImg1(img) {
     // console.log('render')
     gBackgroundImg = img
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
     // resizeCanvas()
 
-    // drawCanvasFrame()
+    drawCanvasFrame()
 }
 
-function renderImg1(img) {
+function renderImg(img) {
     gBackgroundImg = img
-    // gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
+    gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
+
+
 
 
 
@@ -924,11 +890,7 @@ function updateTextInputs() {
 
 function resetCanvas() {
 
-    console.log(' 2 before texts', gElCanvas.width, gElCanvas.height)
-
     renderCanvas()
-
-    console.log('3 before texts', gElCanvas.width, gElCanvas.height)
 
     // var selectedImg = getMemeImgId()
     // const img = new Image()
@@ -938,32 +900,24 @@ function resetCanvas() {
     // console.log('before texts', gBackgroundImg.width, gBackgroundImg.height)
     // var canvasLength = gElCanvas.getBoundingClientRect().height
 
-    var textX = gElCanvas.width
-    var textY = gElCanvas.height
 
-    // textX = gAdjustedX
-    // textY = gAdjustedY
-
-    console.log('adjusted', textX, textY)
 
     textShape('Top Text',
-        textX / 2,
+        gElCanvas.width / 2,
         70,
         100,
         'white')
 
     textShape('Bottom Text',
-        textX / 2,
-        textY - 70,
+        gElCanvas.width / 2,
+        gElCanvas.height - (100) - 70,
         100,
         'white')
 
     onInitEditableTexts()
     updateTextInputs()
-    hideAllToolbars()
+    hideAllToolbars()    
     renderCanvas()
-
-    console.log(' 4 before texts', gElCanvas.width, gElCanvas.height)
 
     // gShapesDrawn[0].y = 70
     // var canvasLength = gElCanvas.getBoundingClientRect().height
@@ -1008,8 +962,8 @@ function resizeCanvas(){
     }
 }
 
-function resizeaCanvas() {
-    console.log('resize')
+function resizeCanva1s() {
+    // console.log('resize')
     const elContainer = document.querySelector('.canvas-container')
     var oldCanvasX = gElCanvas.width
     var oldCanvasY = gElCanvas.height
@@ -1068,7 +1022,11 @@ function onInitMemeEditor() {
     gShapesDrawn = []
 
     resetCanvas()
+
+    // console.log('1 on init editor, ', gElCanvas.width, gElCanvas.height)
     renderCanvas()
+    // console.log('2 on init editor, ', gElCanvas.width, gElCanvas.height)
+
 }
 
 function renderStickers() {

@@ -3,11 +3,15 @@
 
 const keywordOptions = ['Cat', 'Happy', 'Sad', 'Crazy', 'Sarcastic', 'Funny']
 
+var gKeywordSearchCountMap = {}
+
+
+
 var gImgs
 
 function _debugImages() {
     var debugImages = []
-    for (var i = 1; i < 19; i++) {
+    for (var i = 1; i < 109; i++) {
         debugImages.push({
             id: i,
             url: `img/${i}.jpg`,

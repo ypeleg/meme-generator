@@ -38,6 +38,11 @@
     src: url(../../fonts/FontAwesome/fa-brands-400.ttf);
 }
 
+@font-face {
+    font-family: fa-regular;
+    src: url(../../fonts/FontAwesome/fa-regular-400.ttf);
+}
+
 
 /* Font Awesome */
 .fa::before {
@@ -88,3 +93,38 @@
 }
 
 
+.fa-stroke.fa-stroke::before {
+    font-family: fa-solid;
+    content: '\f0cd';
+    font-style: normal;
+}
+
+.fa-solid.fa-palette::before {
+    font-family: fa-solid;
+    content: '\f576';
+    font-style: normal;
+}
+
+.fa-solid.fa-trash::before {
+    font-family: fa-solid;
+    content: '\f1f8';
+    font-style: normal;
+}
+
+.fa-solid.fa-plus::before {
+    font-family: fa-solid;
+    content: '\2b';
+    font-style: normal;
+}
+
+.fa-solid.fa-text::before {
+    font-family: fa-solid;
+    content: '\f031';
+    font-style: normal;
+}
+
+.fa-solid.fa-poo::before {
+    font-family: fa-solid;
+    content: '\f2fe';
+    font-style: normal;
+}

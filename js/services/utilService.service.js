@@ -1,3 +1,5 @@
+
+
 function makeId(length = 6) {
   const possible =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -20,3 +22,4 @@ function loadFromStorage(key) {
 function randomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
+
