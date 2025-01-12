@@ -367,13 +367,16 @@ function shapeWithToolbar() {
             var finalX = x + canvasX
             var finalY = y + canvasY
 
-            if (finalY < 60) { finalY = 60 }
-            if (finalX < 0) { finalX = 0 }
+
             if (finalX > workAreaWidth - gElToolbar.offsetWidth) { finalX = workAreaWidth - gElToolbar.offsetWidth }
 
             if (finalY < canvasY) {
                 finalY += (this.size * 2) + (gElToolbar.getBoundingClientRect().height) + 20
             }
+
+            if (finalY < 60) { finalY = 60 }
+            if (finalX < 0) { finalX = 0 }
+            
 
             gElToolbar.style.left = finalX + 'px'
             gElToolbar.style.top = finalY + 'px'
