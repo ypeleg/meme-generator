@@ -128,3 +128,9 @@
     content: '\f2fe';
     font-style: normal;
 }
+
+.fa.fa-upload::before {
+    font-family: fa-solid;
+    content: '\f15b';
+    font-style: normal;
+}

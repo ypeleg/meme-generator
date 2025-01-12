@@ -222,32 +222,6 @@ nav ul li:last-of-type {
 
 }
 
-.editable-text .in-focus,
-.editable-text input:focus{
-
-    /*padding: 0em 0em 0em 3.5em;*/
-
-    padding: 0em 0.5em 0em 2.5em;
-    /*padding: 0em 0em 0em 0em;*/
-    margin: 0em 2.0em 0em 0em;
-
-
-    outline: none;
-    /*z-index: 1;*/
-    background-color: #f9f9f9;
-    /*min-width: 600px;*/
-    /*min-height: 300px;*/
-    min-height: 5em;
-    /*top: 0.7em;*/
-    /*position: fixed;*/
-
-    font-size: 1.0em;
-    color: #5d5d5d;
-
-    /*padding: 0em 1em 0em 3em;*/
-    /*padding: 0em 3em 0em 5.5em;*/
-
-}
 
 
 
@@ -315,36 +289,14 @@ nav ul li:last-of-type {
 
 .editable-text .in-focus,
 .editable-text input:focus{
-
-    /*padding: 0em 0em 0em 3.5em;*/
-
-    /*padding: 0em 0.5em 0em 2.5em;*/
     padding: 0em 0.5em 0em 2.5em;
-    margin: 0em 2.0em 0em 0em;
-
-
+    /*margin: 0em 2.0em 0em 0em;*/
     outline: none;
-    /*z-index: 1;*/
     background-color: #f9f9f9;
-    /*min-width: 600px;*/
-    /*min-height: 300px;*/
     min-height: 5em;
-    /*top: 0.7em;*/
-    /*position: fixed;*/
-
     font-size: 1.0em;
     color: #5d5d5d;
-
-    /*padding: 0em 1em 0em 3em;*/
-    /*padding: 0em 3em 0em 5.5em;*/
-
 }
-
-
-
-
-
-
 
 .editable-text::before {
     font-family: 'fa-solid';
@@ -359,15 +311,11 @@ nav ul li:last-of-type {
 }
 
 .editable-text:has( input:focus )::before {
-    /*left: 1em;*/
     font-family: 'fa-solid';
     font-size: 1.0em;
     content: '\f044';
-    /*text-shadow: 0 0 0 gray;*/
     text-shadow: 0 0 0 #5d5d5d;
     pointer-events: none;
-    /*top: 0.7em;*/
-    /*top: 2em;*/
     color: #5d5d5d;
 }
 
@@ -411,14 +359,7 @@ nav ul li:last-of-type {
     z-index: 0;
 }
 
-/*.editable-text-button:has( input:focus )::before {*/
-/*    font-family: 'fa-solid';*/
-/*    font-size: 1.0em;*/
-/*    content: '\f044';*/
-/*    text-shadow: 0 0 0 #5d5d5d;*/
-/*    pointer-events: none;*/
-/*    color: #5d5d5d;*/
-/*}*/
+
 
 .editable-text-button input {
     font-size: 1.0em;
@@ -441,30 +382,8 @@ nav ul li:last-of-type {
 
 .editable-text-button .in-focus,
 .editable-text-button input:focus{
-    /*padding: 0em 0.5em 0em 2.5em;*/
-    /*margin: 0em 2.0em 0em 0em;*/
     outline: none;
-    /*background-color: #f9f9f9;*/
-    /*min-height: 5em;*/
-    /*font-size: 1.0em;*/
-    /*color: #5d5d5d;*/
 }
-
-
-
-/*.editable-text-button:has( input:focus )::before {*/
-/*    font-family: 'fa-solid';*/
-/*    font-size: 1.0em;*/
-/*    content: '\f044';*/
-/*    text-shadow: 0 0 0 #5d5d5d;*/
-/*    pointer-events: none;*/
-/*    color: #5d5d5d;*/
-/*}*/
-
-
-
-
-
 
 
 
@@ -500,8 +419,10 @@ nav ul li:last-of-type {
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    gap: 1em;
-    padding: 1em;
+    /*gap: 1em;*/
+    /*padding: 1em;*/
+    width: 100%;
+    padding-inline: 1em;
 }
 
 
@@ -864,13 +785,13 @@ nav ul li:last-of-type {
 
 .side-page-editor {
     /*height: 100%;*/
-    height: 95vh;
+    /*height: 95vh;*/
     display: flex;
     align-items: center;
     flex-direction: column;
     /*justify-content: stretch;*/
-    justify-content: space-between;
-    row-gap: 0.5em;
+    /*justify-content: space-between;*/
+    /*row-gap: 0.5em;*/
 
     display: none;
 
@@ -917,9 +838,9 @@ canvas {
 /* side bar buttons */
 .btn-add {
 
-    height: 50px;
+    min-height: 50px;
 
-    /*width: 70%;*/
+    width: 100%;
     padding: 0;
     border: none;
     color:#161616;
@@ -941,7 +862,7 @@ canvas {
     width: 20%;
     height: 100%;
     color: white;
-    font-size: 1.5em;
+    font-size: 1.2em;
     padding-inline: 0.2em;
     margin-inline-end: 0.5em;
     background-color: #4d90fe;
@@ -1104,24 +1025,71 @@ canvas {
     /*gap: 10px;*/
     /*padding: 20px;*/
     display: grid;
-    grid-auto-flow: dense;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /*grid-auto-flow: dense;*/
+    align-items: center;
+    justify-items: center;
+
+
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    /*grid-template-rows: repeat(auto-fill, minmax(auto, 200px));*/
 }
+
+
 
 .gallery-grid-container img {
     opacity: 1;
     scale: 1.0;
     cursor: pointer;
     transition: all 0.1s;
+
+    aspect-ratio: 1/1;
+    /*width: auto;*/
+    /*height: 100%;*/
+    max-width: fit-content;
+    /*object-fit: inherit;*/
+    /*box-shadow: 0 0 3px 3px rgba(0,0,0,.2);*/
+    box-shadow: 0 0 4px 1px rgba(0,0,0,.2);
+}
+
+.gallery-grid-container .first-img {
+    font-family: lato-bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    aspect-ratio: auto;
+    color: #666666;
+    /*margin: 4px;*/
+    /*max-width: 100%;*/
+    width: 100%;
     height: 100%;
-    /*object-fit: none;*/
+    /*border: 1px solid #4d90fe;*/
+    border: 3px dashed #bdbdbd;
+    /*border-radius: 8px;*/
+    /*box-shadow: 0 2px 4px 4px rgba(0,0,0,.2);*/
+    padding-inline: 1.0em;
+    background-color: #eeeeee;
+
+
+    /*grid-column: span 2;*/
+    /*grid-row: span 2;*/
+
+
+
+}
+
+.gallery-grid-container .first-img .fa{
+    font-size: 2em;
+    color: #bdbdbd;
+    margin-bottom: 0.5em;
 }
 
 .gallery-grid-container img:hover {
     opacity: 0.9;
     /*scale: 1.5;*/
     box-shadow: 0 2px 4px 4px rgba(0,0,0,.4);
-    border: 5px solid #4d90fe;
+    border: 3px solid #4d90fe;
     z-index: 2;
 }
 
@@ -1267,12 +1235,16 @@ canvas {
 /* TODO: add this 'parent selector' to my summary notes  */
 /*div:has(> .bottom-btn) {*/
 .bottom-container {
-    margin-bottom: 0.5em;
+    /*align-self: end;*/
+    margin-top: auto;
+    /*margin-bottom: 0.5em;*/
     row-gap: 1em;
-    height: 100%;
+    bottom: 6vh;
+    height: 90%;
     width: 100%;
     display: flex;
-    padding: 1em 0;
+    /*padding: 1em 0;*/
+    padding: 1em;
     position: relative;
     align-items: center;
     flex-direction: column;

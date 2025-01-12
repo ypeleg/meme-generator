@@ -38,7 +38,7 @@ function loadCanvasWith(imgUrl) {
         // gElCanvas.height = gElCanvas.width
         gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
 
-        var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
+        var maxHeight = document.querySelector('.main-layout').offsetHeight * 0.65
         console.log('maxHeight:', maxHeight)
         if (gElCanvas.height > maxHeight) {
             gElCanvas.height = maxHeight
@@ -84,7 +84,7 @@ function resizeCanvas(){
     gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
     // gElCanvas.height = gElCanvas.width
 
-    var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
+    var maxHeight = document.querySelector('.main-layout').offsetHeight * 0.65
     console.log('maxHeight:', maxHeight)
     if (gElCanvas.height > maxHeight) {
         gElCanvas.height = maxHeight
@@ -104,15 +104,30 @@ function resizeCanvas(){
         gShapesDrawn[i].y = newShapeY
         gShapesDrawn[i].size = newShapeSize
     }
-
-    if (screenWidth < 640) {
-        gElToolbar.style.left = '0'
+    var screenWidth = window.innerWidth
+    if (screenWidth < 900) {
         gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
         gElToolbar.style.bottom = 'auto'
+
+        if (screenWidth < 640) {
+            gElToolbar.style.left = '0'
+            gElToolbar.style.width = 100 + '%'
+        } else {
+            gElToolbar.style.left = '5%'
+            gElToolbar.style.width = 90 + '%'
+        }
     } else {
-        gElToolbar.style.left = 'auto'
-        gElToolbar.style.top = 'auto'
+
+        var toolbarWidth = gElToolbar.offsetWidth
+        var canvasWidth = gElCanvas.width
+
+        gElToolbar.style.left = gElCanvas.getBoundingClientRect().left + (canvasWidth - toolbarWidth) / 2 + 'px'
+        gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px' // 'auto'
         gElToolbar.style.bottom = 'auto'
+        gElToolbar.style.width = 'auto'
+        // gElToolbar.style.left = '5%'
+        // gElToolbar.style.width = 80 + '%'
+
     }
 
 
@@ -338,10 +353,16 @@ function shapeWithToolbar() {
             this.isSelected = true
 
             var screenWidth = window.innerWidth
-            if (screenWidth < 640) {
+            if (screenWidth < 900) {
                 gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
                 gElToolbar.style.bottom = 'auto'
-                gElToolbar.style.left = '0px'
+                if (screenWidth < 640) {
+                    gElToolbar.style.left = '0'
+                    gElToolbar.style.width = 100 + '%'
+                } else {
+                    gElToolbar.style.left = '5%'
+                    gElToolbar.style.width = 90 + '%'
+                }
             }
 
         },
@@ -403,10 +424,16 @@ function shapeWithToolbar() {
             if (finalX < 0) { finalX = 0 }
 
             var screenWidth = window.innerWidth
-            if (screenWidth < 640) {
+            if (screenWidth < 900) {
                 gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
+                if (screenWidth < 640) {
+                    gElToolbar.style.left = '0'
+                    gElToolbar.style.width = 100 + '%'
+                } else {
+                    gElToolbar.style.left = '5%'
+                    gElToolbar.style.width = 90 + '%'
+                }
                 gElToolbar.style.bottom = 'auto'
-                gElToolbar.style.left = '0px'
             } else {
 
                 gElToolbar.style.left = finalX + 'px'
@@ -426,12 +453,22 @@ function shapeWithToolbar() {
 
             var screenWidth = window.innerWidth
 
-            if (screenWidth < 640) {
-                gElToolbar.style.left = '0'
+            if (screenWidth < 900) {
                 gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
                 gElToolbar.style.bottom = 'auto'
+                if (screenWidth < 640) {
+                    gElToolbar.style.left = '0'
+                    gElToolbar.style.width = 100 + '%'
+                } else {
+                    gElToolbar.style.left = '5%'
+                    gElToolbar.style.width = 90 + '%'
+                }
+                // gElToolbar.style.left = '5%'
+                // gElToolbar.style.width = 90 + '%'
 
             } else {
+
+                gElToolbar.style.width = 'auto'
 
                 var toolbarHeight = gElToolbar.getBoundingClientRect().height
                 document.querySelector('.context-toolbar-text-editor-input').value = this.text
@@ -778,6 +815,8 @@ function textShape(text = null, x = null, y = null, size = null, color = null) {
         strokeColor: 'black',
         strokeWidth: 2,
 
+        rotate: 45,
+
         isClickedInHitBox(clickX, clickY) {
             return (clickX >= this.x - gCtx.measureText(this.text).width / 2 &&
                 clickX <= this.x + gCtx.measureText(this.text).width / 2 &&
@@ -804,19 +843,37 @@ function textShape(text = null, x = null, y = null, size = null, color = null) {
 
             var fontStr = `${this.fontStyle} normal ${this.fontWeight} ${this.size}px ${this.font}`
 
+
+
             gCtx.font = fontStr
             gCtx.fillStyle = this.color
             gCtx.textAlign = this.textAlign
             gCtx.textBaseline = 'middle'
 
+            // gCtx.save()
+            // gCtx.translate(this.x, this.y)
+            // gCtx.rotate(this.rotate * Math.PI / 180)
             gCtx.fillText(this.text, this.x, this.y)
+            // gCtx.fillText(this.text, 0, this.y / 2)
+            // gCtx.restore()
 
+            // gCtx.save()
+            // gCtx.translate(this.x, this.y)
+            // gCtx.rotate(this.rotate * Math.PI / 180)
             if (this.strokeWidth > 0) {
                 gCtx.setLineDash([])
                 gCtx.strokeStyle = this.strokeColor
                 gCtx.lineWidth = this.strokeWidth
                 gCtx.strokeText(this.text, this.x, this.y)
+                // gCtx.strokeText(this.text, 0, this.y / 2)
             }
+            // gCtx.restore()
+
+
+
+
+
+
 
         }
     }

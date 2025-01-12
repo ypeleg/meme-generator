@@ -18,11 +18,21 @@ function shuffleArray(array) {
     return newArray
 }
 
+function clickOnUpload() { document.querySelector('.imgupload').click() }
+
 function onInitGallery() {
     var elGalleryImages = document.querySelector('.gallery-grid-container')
     var images = getImages()
     images = shuffleArray(images)
-    var strHTML = ''
+
+    // var strHTML = `<img class = "first-img" src="img/upload.png" onclick="clickOnUpload()">`
+
+    var strHTML = `
+    <div class = "first-img" onclick="clickOnUpload()">
+        <div class="fa fa-upload"></div>
+        <p>Upload Image</p>
+    </div>`
+
     for( var i = 0; i < images.length; i++){ strHTML += `<img id="img-${images[i].id}" src="${images[i].url}" onclick="onSelectedTemplate(event, this)">` }
     elGalleryImages.innerHTML = strHTML
     onRenderFilters()
