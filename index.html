@@ -13,6 +13,7 @@
 
     <body onload="onAppInit()" onresize="resizeCanvas()">
 
+        <div class="screen" onclick="closeTopMenuIfOpen()"></div>
 
         <div class="sticker-modal">
             <div class="sticker-modal-content">
@@ -67,13 +68,13 @@
                 <div class="logo flex align-center" onclick="moveToGalleryPage()">Meme Studio</div>
 
                 <nav class="main-nav flex align-center">
-                    <ul class="flex clean-list flex align-center">
+                    <ul class="top-bar-list flex clean-list flex align-center">
                         <li class="top-bar-active gallery-nav" onclick="moveToGalleryPage()"><a href="#">Gallery</a></li>
                         <li class="editor-nav" onclick="moveToEditorIfYouCan()"><a href="#">Editor</a></li>
                         <li class="saved-memes-nav" onclick="moveToSavedMemesPage()"><a href="#">Memes</a></li>
-                        <li class="about-nav"><a href="#">About</a></li>
-                        <span class="hamburger" onclick="onToggleMenu()">☰</span>
+                        <li class="about-nav"><a href="#">About</a></li>                        
                     </ul>
+                    <span class="hamburger" onclick="onToggleMenu()">☰</span>
                 </nav>
             </div>
         </header>
@@ -341,11 +342,11 @@
                         </div>
 
                         <div class="toolbar-group">
-                            <i class="toolbar-icon fa-solid fa-palette"></i>
+                            <div class="toolbar-icon fa-solid fa-palette"></div>
                             <input class="color-picker" type="color" id="color-picker" value="#000000" onchange="onColorChange(event)" oninput="onColorChange(event)" />
                         </div>
                         <div class="toolbar-group">
-                            <i class="toolbar-icon fa-solid fa-stroke"></i>
+                            <div class="toolbar-icon fa-solid fa-stroke"></div>
                             <input class="color-picker" type="color" id="stroke-color" value="#000000" onchange="onStrokeColorChange(event)" oninput="onStrokeColorChange(event)" />
                             <input type="range" id="stroke-width" class="toolbar-slider" min="0" max="10" value="2" step="1" oninput="onStrokeWidthChange(event)" />
                         </div>

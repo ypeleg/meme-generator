@@ -50,8 +50,9 @@
 
 body {
     margin: 0px;
-    padding: 0px;
+    padding: 0px;    
     overflow: hidden;
+    user-select: none;
     min-height: 100vh;
     background-color: #f5f5fa;
 
@@ -91,7 +92,7 @@ header>* {
 .hamburger {
     font-size: 1.5em;
     color: #161616;
-    display: none;
+    /* display: none; */
 }
 
 
@@ -135,10 +136,16 @@ nav ul li:last-of-type {
     /*height: calc(100vh - 60px);*/
 }
 
+
+
 .main-nav li {
 
     list-style-type: none;
     padding: 0.4em 0.9em;
+}
+
+.menu-open {
+    translate: 0 0;
 }
 
 .hamburger-menu {
@@ -149,6 +156,20 @@ nav ul li:last-of-type {
 }
 
 
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+
+    z-index: 5;
+}
+
+header {
+    z-index: 7;
+}
 
 .dropdowns {
     display: flex;

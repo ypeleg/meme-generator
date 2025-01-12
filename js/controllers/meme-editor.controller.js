@@ -90,7 +90,7 @@ function resizeCanvas(){
         gElCanvas.height = maxHeight
         gElCanvas.width = gBackgroundImg.width * gElCanvas.height / gBackgroundImg.height
     }
-
+    
     for (let i = 0; i < gShapesDrawn.length; i++) {
         var currentShapeX = gShapesDrawn[i].x
         var currentShapeY = gShapesDrawn[i].y
@@ -158,6 +158,7 @@ function resizeCanvas(){
 function onEvent(ev) {
     if (ev.type === 'mousemove') { gElCanvas.style.cursor = 'default' }
     for (let i = 0; i < gShapesDrawn.length; i++) {
+        console.log('ev', ev.type)
         gShapesDrawn[i].trigger(ev)
     }
     renderCanvas()
@@ -182,7 +183,7 @@ function fixTouchCoords(ev) {
         x: ev.offsetX,
         y: ev.offsetY,
     }
-    if (TOUCH_EVS.includes(ev.type)) {
+    if (TOUCH_EVS.includes(ev.type))  {        
         ev.preventDefault()
         ev = ev.changedTouches[0]
         pos = {
@@ -280,10 +281,12 @@ function draggableShape() {
         offsetY: 0,
 
         onMouseUp(ev) {
+            
             this.isDrag = false
         },
 
         onMouseDown(ev) {
+            
             var [offsetX, offsetY] = fixTouchCoords(ev)
             if (this.isClickedOn(offsetX, offsetY)) {
                 this.isDrag = true
@@ -293,6 +296,7 @@ function draggableShape() {
         },
 
         onMouseMove(ev) {
+            
             var [offsetX, offsetY] = fixTouchCoords(ev)
             if (this.isDrag) {
                 // gElCanvas.style.cursor = 'grabbing'
@@ -311,9 +315,9 @@ function draggableShape() {
     draggable.registerCallback(draggable, draggable.onMouseDown, 'mousedown')
     draggable.registerCallback(draggable, draggable.onMouseMove, 'mousemove')
 
-    draggable.registerCallback(draggable, draggable.onMouseUp, 'ontouchstart')
-    draggable.registerCallback(draggable, draggable.onMouseDown, 'ontouchend')
-    draggable.registerCallback(draggable, draggable.onMouseMove, 'ontouchmove')
+    draggable.registerCallback(draggable, draggable.onMouseUp, 'touchend')
+    draggable.registerCallback(draggable, draggable.onMouseDown, 'touchstart')
+    draggable.registerCallback(draggable, draggable.onMouseMove, 'touchmove')
 
     return draggable
 }
@@ -527,9 +531,9 @@ function shapeWithToolbar() {
     shape.registerCallback(shape, shape.toolbarOnMouseMove, 'mousemove')
     shape.registerCallback(shape, shape.toolbarOnMouseUp, 'mouseup')
 
-    shape.registerCallback(shape, shape.toolbarOnMouseDown, 'ontouchstart')
-    shape.registerCallback(shape, shape.toolbarOnMouseMove, 'ontouchmove')
-    shape.registerCallback(shape, shape.toolbarOnMouseUp, 'ontouchend')
+    shape.registerCallback(shape, shape.toolbarOnMouseDown, 'touchstart')
+    shape.registerCallback(shape, shape.toolbarOnMouseMove, 'touchmove')
+    shape.registerCallback(shape, shape.toolbarOnMouseUp, 'touchend')
 
     shape.registerCallback(shape, shape.toolbarrenderSelf, 'onrender')
 
@@ -673,9 +677,9 @@ function shapeWithToolbarClose() {
     shape.registerCallback(shape, shape.ToolbarCloseOnMouseMove, 'mousemove')
     shape.registerCallback(shape, shape.ToolbarCloseOnMouseUp, 'mouseup')
 
-    shape.registerCallback(shape, shape.ToolbarCloseOnMouseDown, 'ontouchstart')
-    shape.registerCallback(shape, shape.ToolbarCloseOnMouseMove, 'ontouchmove')
-    shape.registerCallback(shape, shape.ToolbarCloseOnMouseUp, 'ontouchend')
+    shape.registerCallback(shape, shape.ToolbarCloseOnMouseDown, 'touchstart')
+    shape.registerCallback(shape, shape.ToolbarCloseOnMouseMove, 'touchmove')
+    shape.registerCallback(shape, shape.ToolbarCloseOnMouseUp, 'touchend')
 
     shape.registerCallback(shape, shape.ToolbarCloserenderSelf, 'onrender')
 
@@ -1053,8 +1057,23 @@ function onRemoveSticker(el, event) {
 
 
 
+function onToggleMenu() {
+    var elTopBarList = document.querySelector('.top-bar-list')
+    elTopBarList.classList.toggle('menu-open')
 
+    var elScreen = document.querySelector('.screen')
+    elScreen.style.display = 'block'
 
+}
+
+function closeTopMenuIfOpen() {
+    var elTopBarList = document.querySelector('.top-bar-list')
+    if (elTopBarList.classList.contains('menu-open')) {
+        elTopBarList.classList.remove('menu-open')
+        var elScreen = document.querySelector('.screen')
+        elScreen.style.display = 'none'
+    }    
+}
 
 
 

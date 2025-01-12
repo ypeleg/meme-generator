@@ -46,6 +46,8 @@ function onInitGallery() {
 
 function moveToEditorPage(){
 
+    closeTopMenuIfOpen()
+    
     document.querySelector('.page-gallery').style.display = 'none'
     document.querySelector('.page-editor').style.display = 'contents'
     document.querySelector('.page-saved-gallery').style.display = 'none'
@@ -59,9 +61,13 @@ function moveToEditorPage(){
 
     gEditedMemeAlready = true
 
+    
+
 }
 
 function moveToGalleryPage(event, element){
+
+    closeTopMenuIfOpen()
 
     document.querySelector('.page-gallery').style.display = 'flex'
     document.querySelector('.page-editor').style.display = 'none'
@@ -76,13 +82,15 @@ function moveToGalleryPage(event, element){
 
     hideAllToolbars()
     onInitGallery()
-
+    
+    
 
 
 }
 
 function moveToSavedMemesPage(event, element){
 
+    closeTopMenuIfOpen()
 
     document.querySelector('.page-gallery').style.display = 'none'
     document.querySelector('.page-editor').style.display = 'none'
@@ -99,6 +107,8 @@ function moveToSavedMemesPage(event, element){
 
     hideAllToolbars()
     onInitSavedMemes()
+
+    
 
 
 }
