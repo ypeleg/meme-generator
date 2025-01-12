@@ -55,13 +55,13 @@ function resetCanvas() {
 
     textShape('Top Text',
         textX / 2,
-        70,
-        100 * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
+        (gOrigWidth * 0.07),
+        (gOrigWidth * 0.1) * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
 
     textShape('Bottom Text',
         textX / 2,
-        textY - 70,
-        100 * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
+        textY - (gOrigWidth * 0.07),
+        (gOrigWidth * 0.1) * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
 
     onInitEditableTexts()
     updateTextInputs()
@@ -91,14 +91,25 @@ function resizeCanvas(){
         var currentShapeY = gShapesDrawn[i].y
         var currentShapeSize = gShapesDrawn[i].size
 
-        var newShapeX = currentShapeX / oldCanvasX * elContainer.offsetWidth
-        var newShapeY = currentShapeY / oldCanvasY * elContainer.offsetHeight
-        var newShapeSize = currentShapeSize / oldCanvasY * elContainer.offsetHeight
+        var newShapeX = currentShapeX / oldCanvasX * gElCanvas.width
+        var newShapeY = currentShapeY / oldCanvasY * gElCanvas.height
+        var newShapeSize = currentShapeSize / oldCanvasY * gElCanvas.height
 
         gShapesDrawn[i].x = newShapeX
         gShapesDrawn[i].y = newShapeY
         gShapesDrawn[i].size = newShapeSize
     }
+
+    if (screenWidth < 640) {
+        gElToolbar.style.left = '0'
+        gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
+        gElToolbar.style.bottom = 'auto'
+    } else {
+        gElToolbar.style.left = 'auto'
+        gElToolbar.style.top = 'auto'
+        gElToolbar.style.bottom = 'auto'
+    }
+
 
     renderCanvas()
 }
@@ -319,6 +330,14 @@ function shapeWithToolbar() {
             gElToolbar.style.display = 'block'
             setSelectedShapeIdx(this.id)
             this.isSelected = true
+
+            var screenWidth = window.innerWidth
+            if (screenWidth < 640) {
+                gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
+                gElToolbar.style.bottom = 'auto'
+                gElToolbar.style.left = '0px'
+            }
+
         },
 
         hideToolbar() {
@@ -376,11 +395,19 @@ function shapeWithToolbar() {
 
             if (finalY < 60) { finalY = 60 }
             if (finalX < 0) { finalX = 0 }
-            
 
-            gElToolbar.style.left = finalX + 'px'
-            gElToolbar.style.top = finalY + 'px'
-            gElToolbar.style.bottom = 'auto'
+            var screenWidth = window.innerWidth
+            if (screenWidth < 640) {
+                gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
+                gElToolbar.style.bottom = 'auto'
+                gElToolbar.style.left = '0px'
+            } else {
+
+                gElToolbar.style.left = finalX + 'px'
+                gElToolbar.style.top = finalY + 'px'
+                gElToolbar.style.bottom = 'auto'
+            }
+            // console.log(gElToolbar.style.maxWidth)
 
             // console.log('toolbar moved to', x, y)
 
@@ -393,10 +420,10 @@ function shapeWithToolbar() {
 
             var screenWidth = window.innerWidth
 
-            if (screenWidth < 800) {
+            if (screenWidth < 640) {
                 gElToolbar.style.left = '0'
-                gElToolbar.style.top = 'auto'
-                gElToolbar.style.bottom = '0'
+                gElToolbar.style.top = gElCanvas.getBoundingClientRect().bottom + 20 + 'px'
+                gElToolbar.style.bottom = 'auto'
 
             } else {
 
