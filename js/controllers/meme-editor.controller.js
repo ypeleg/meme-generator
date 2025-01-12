@@ -25,25 +25,28 @@ function renderCanvas() {
 function loadCanvasWith(imgUrl) {
     const img = new Image()
     img.src = imgUrl
-    gBackgroundImg = img
-    moveToEditorPage()
+    img.onload = () => {
+        gBackgroundImg = img
+        moveToEditorPage()
 
-    gElCanvas = document.querySelector('canvas')
-    gCtx = gElCanvas.getContext('2d')
+        gElCanvas = document.querySelector('canvas')
+        gCtx = gElCanvas.getContext('2d')
 
-    const elContainer = document.querySelector('.canvas-container')
-    gElCanvas.width = elContainer.offsetWidth
-    gOrigWidth = gElCanvas.width
-    // gElCanvas.height = gElCanvas.width
-    gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
+        const elContainer = document.querySelector('.canvas-container')
+        gElCanvas.width = elContainer.offsetWidth
+        gOrigWidth = gElCanvas.width
+        // gElCanvas.height = gElCanvas.width
+        gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
 
-    var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
-    console.log('maxHeight:', maxHeight)
-    if (gElCanvas.height > maxHeight) {
-        gElCanvas.height = maxHeight
-        gElCanvas.width = gBackgroundImg.width * gElCanvas.height / gBackgroundImg.height
+        var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
+        console.log('maxHeight:', maxHeight)
+        if (gElCanvas.height > maxHeight) {
+            gElCanvas.height = maxHeight
+            gElCanvas.width = gBackgroundImg.width * gElCanvas.height / gBackgroundImg.height
+        }
+        console.log('gElCanvas.width:', gElCanvas.width, 'gElCanvas.height:', gElCanvas.height, gBackgroundImg.height, gBackgroundImg.width)
+        resetCanvas()
     }
-    resetCanvas()
 }
 
 function resetCanvas() {
@@ -66,6 +69,8 @@ function resetCanvas() {
     onInitEditableTexts()
     updateTextInputs()
     hideAllToolbars()
+
+    console.log(gElCanvas.width, gElCanvas.height)
     renderCanvas()
 }
 
@@ -152,6 +157,7 @@ function onUploadBackground(ev) {
     const reader = new FileReader()
     reader.onload = (event) => { loadCanvasWith(event.target.result) }
     reader.readAsDataURL(ev.target.files[0])
+
 }
 
 
