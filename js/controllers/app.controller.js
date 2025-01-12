@@ -4,7 +4,7 @@
 function onAppInit(){
 
     onInitGallery()
-    onInitMemeEditor()
+    // onInitMemeEditor()
 
     // if(document.querySelector('.page-editor').style.display !== 'none') {
     //     console.log(document.querySelector('.page-editor').style)

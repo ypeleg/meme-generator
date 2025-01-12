@@ -22,67 +22,15 @@ function onInitGallery() {
     var elGalleryImages = document.querySelector('.gallery-grid-container')
     var images = getImages()
     images = shuffleArray(images)
-
-
     var strHTML = ''
-
-    for( var i = 0; i < images.length; i++){
-        // TODO: revisit the html datasets lesson and see if there is a better to do this..
-        strHTML += `<img id="img-${images[i].id}" src="${images[i].url}" onclick="onSelectedTemplate(event, this)">`
-    }
+    for( var i = 0; i < images.length; i++){ strHTML += `<img id="img-${images[i].id}" src="${images[i].url}" onclick="onSelectedTemplate(event, this)">` }
     elGalleryImages.innerHTML = strHTML
-
     onRenderFilters()
-
-    // document.querySelector('.search-bar-input').value = ''
-}
-
-function renderGalleryImage(elGalleryImage) {
-    // TODO: find a better way to do this if there is time left
-    var imgID = elGalleryImage.id.split('-')[1]
-    imgID = parseInt(imgID)
-
-    // console.log('imgID:', imgID)
-    var images = getImages(imgID)
-
-    // console.log('images:', images[0])
-    setMemeImgId(images[0].id)
-
-    // console.log('1 render gallery: ', gElCanvas.width, gElCanvas.height)
-    renderSelectedImg()
-    // console.log('2 render gallery: ', gElCanvas.width, gElCanvas.height)
-}
-
-function renderSelectedImg(){
-    var selectedImg = getMemeImgId()
-    const img = new Image()
-    img.onload = () => { renderImg(img) }
-
-    console.log('selectedImg:', selectedImg)
-    console.log('selectedImg:', getImages(selectedImg))
-
-    img.src = getImages(selectedImg)[0].url
 }
 
 
 
-function loadSelectedImg(){
-    var selectedImg = getMemeImgId()
-    const img = new Image()
-    img.onload = () => { loadImg(img) }
 
-    console.log('selectedImg:', selectedImg)
-    console.log('selectedImg:', getImages(selectedImg))
-
-    img.src = getImages(selectedImg)[0].url
-}
-
-
-
-function onSelectedTemplate(event, element){
-    renderGalleryImage(element)
-    moveToEditorPage()
-}
 
 
 
@@ -101,7 +49,6 @@ function moveToEditorPage(){
 
     gEditedMemeAlready = true
 
-    onInitMemeEditor()
 }
 
 function moveToGalleryPage(event, element){
@@ -148,13 +95,8 @@ function moveToSavedMemesPage(event, element){
 
 
 function moveToEditorIfYouCan() {
-    if (gEditedMemeAlready) {
-        moveToEditorPage()
-    } else {
-        // TODO: Add a msg to the user or just chose a random image to edit..
-        moveToGalleryPage()
-    }
-
+    if (gEditedMemeAlready) moveToEditorPage()
+    else moveToGalleryPage()
 }
 
 function removeDuplicates(arr){
@@ -292,24 +234,6 @@ function onInitSavedMemes() {
 
 
 
-// Upload Image
-function onUploadBackground(ev) { loadImageFromInput(ev, renderThenMovePage) }
-function renderThenMovePage(img) {
-    renderImg(img)
-    // renderCanvas()
-    moveToEditorPage()
-}
-
-function loadImageFromInput(ev, onImageReady) {
-    const reader = new FileReader()
-    reader.onload = function (event) {
-        const img = new Image()
-        img.onload = () => { onImageReady(img) }
-        img.src = event.target.result
-    }
-    reader.readAsDataURL(ev.target.files[0])
-
-}
 
 async function uploadImg(imgData, onSuccess) {
     const CLOUD_NAME = 'webify'

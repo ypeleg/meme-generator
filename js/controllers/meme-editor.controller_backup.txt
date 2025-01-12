@@ -1,147 +1,88 @@
 'use strict'
 
 
+// TODO: Things I dont understand well:
+// "this"..
+// any better way to do OOP
+
+
+// TODO: Known Bugs:
+// When clicking on the back button, remove the menu
+// Add another upper button for "saved memes and for editor"
+// The clear button doesnt add the texts again
+// drag is from the "middle"
+//
+
 
 let gCtx
 let gElCanvas
 var gShapesDrawn = []
+var gMouseDown = false
 var gBackgroundImg = null
 
 var gElToolbar = document.querySelector('.context-toolbar')
 var gElCloseToolbar = document.querySelector('.context-toolbar-x')
 
-var gOrigWidth = 0
 
-
-function renderCanvas() {
-    gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.width, gElCanvas.height)
-    for (let i = 0; i < gShapesDrawn.length; i++) {
-        gShapesDrawn[i].renderSelf()
-        gShapesDrawn[i].renderCallbacks()
-
+// Canvas "utils"
+function drawCanvasFrame() {
+    if (!gBackgroundImg) {
+        gCtx.fillStyle = 'white'
+        gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
+    } else {
+        gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.width, gElCanvas.height)
     }
 }
 
-function loadCanvasWith(imgUrl) {
-    const img = new Image()
-    img.src = imgUrl
+
+
+// Canvas "utils"
+function drawCanvasFram1e() {
+    if (!gBackgroundImg) {
+        console.log('draw white')
+        gCtx.fillStyle = 'white'
+        gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
+        console.log('draw white', gElCanvas.width, gElCanvas.height)
+    } else {
+
+        var imgWidth = gBackgroundImg.width
+        var imgHeight = gBackgroundImg.height
+        var canvasWidth = gElCanvas.width
+        var canvasHeight = gElCanvas.height
+
+        console.log('draw log: ', imgWidth, imgHeight, canvasWidth, canvasHeight)
+
+
+        if (imgWidth > imgHeight) {
+            gElCanvas.height = gElCanvas.width * imgHeight / imgWidth
+            gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.width, gElCanvas.width * imgHeight / imgWidth)
+        }
+        else {
+            gElCanvas.width = gElCanvas.height * imgWidth / imgHeight
+            gCtx.drawImage(gBackgroundImg, 0, 0, gElCanvas.height * imgWidth / imgHeight, gElCanvas.height)
+        }
+    }
+}
+
+function renderImg1(img) {
+    // console.log('render')
     gBackgroundImg = img
-    moveToEditorPage()
+    gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
+    // resizeCanvas()
 
-    gElCanvas = document.querySelector('canvas')
-    gCtx = gElCanvas.getContext('2d')
-
-    const elContainer = document.querySelector('.canvas-container')
-    gElCanvas.width = elContainer.offsetWidth
-    gOrigWidth = gElCanvas.width
-    // gElCanvas.height = gElCanvas.width
-    gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
-
-    var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
-    console.log('maxHeight:', maxHeight)
-    if (gElCanvas.height > maxHeight) {
-        gElCanvas.height = maxHeight
-        gElCanvas.width = gBackgroundImg.width * gElCanvas.height / gBackgroundImg.height
-    }
-    resetCanvas()
+    drawCanvasFrame()
 }
 
-function resetCanvas() {
-
-    gShapesDrawn = []
-
-    var textX = gElCanvas.width
-    var textY = gElCanvas.height
-
-    textShape('Top Text',
-        textX / 2,
-        70,
-        100 * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
-
-    textShape('Bottom Text',
-        textX / 2,
-        textY - 70,
-        100 * Math.max(gElCanvas.height, gElCanvas.width) / gOrigWidth)
-
-    onInitEditableTexts()
-    updateTextInputs()
-    hideAllToolbars()
-    renderCanvas()
-}
-
-function resizeCanvas(){
-
-    var oldCanvasX = gElCanvas.width
-    var oldCanvasY = gElCanvas.height
-
-    const elContainer = document.querySelector('.canvas-container')
-    gElCanvas.width = elContainer.offsetWidth
-    gElCanvas.height = gBackgroundImg.height * gElCanvas.width / gBackgroundImg.width
-    // gElCanvas.height = gElCanvas.width
-
-    var maxHeight = document.querySelector('.main-layout').offsetHeight / 2
-    console.log('maxHeight:', maxHeight)
-    if (gElCanvas.height > maxHeight) {
-        gElCanvas.height = maxHeight
-        gElCanvas.width = gBackgroundImg.width * gElCanvas.height / gBackgroundImg.height
-    }
-
-    for (let i = 0; i < gShapesDrawn.length; i++) {
-        var currentShapeX = gShapesDrawn[i].x
-        var currentShapeY = gShapesDrawn[i].y
-        var currentShapeSize = gShapesDrawn[i].size
-
-        var newShapeX = currentShapeX / oldCanvasX * elContainer.offsetWidth
-        var newShapeY = currentShapeY / oldCanvasY * elContainer.offsetHeight
-        var newShapeSize = currentShapeSize / oldCanvasY * elContainer.offsetHeight
-
-        gShapesDrawn[i].x = newShapeX
-        gShapesDrawn[i].y = newShapeY
-        gShapesDrawn[i].size = newShapeSize
-    }
-
-    renderCanvas()
+function renderImg(img) {
+    gBackgroundImg = img
+    gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function onEvent(ev) {
-    if (ev.type === 'mousemove') { gElCanvas.style.cursor = 'default' }
-    for (let i = 0; i < gShapesDrawn.length; i++) {
-        gShapesDrawn[i].trigger(ev)
-    }
-    renderCanvas()
-}
-
-function onSelectedTemplate(event, element){
-    var selectedImg = getImages(parseInt(element.id.split('-')[1]))[0]
-    loadCanvasWith(selectedImg.url)
-}
-
-function onUploadBackground(ev) {
-    const reader = new FileReader()
-    reader.onload = (event) => { loadCanvasWith(event.target.result) }
-    reader.readAsDataURL(ev.target.files[0])
-}
+// Canvas "utils"
 
 
 function fixTouchCoords(ev) {
@@ -160,6 +101,9 @@ function fixTouchCoords(ev) {
     }
     return [pos.x, pos.y]
 }
+
+
+
 
 // TODO: move to  'Generic Shapes'
 function extend(obj1, obj2) {
@@ -304,8 +248,6 @@ function onTextChange(ev) {
     renderCanvas()
 }
 
-var gToolbarUp = true
-
 function shapeWithToolbar() {
 
     var shape = extend(abstractShape(), {
@@ -360,6 +302,9 @@ function shapeWithToolbar() {
             var canvasX = gElCanvas.getBoundingClientRect().left
             var canvasY = gElCanvas.getBoundingClientRect().top
 
+            // var canvasWidth = gElCanvas.width
+            // var canvasHeight = gElCanvas.height
+
             var elWorkArea = document.querySelector('.work-area')
             var workAreaWidth = elWorkArea.offsetWidth
 
@@ -371,9 +316,7 @@ function shapeWithToolbar() {
             if (finalX < 0) { finalX = 0 }
             if (finalX > workAreaWidth - gElToolbar.offsetWidth) { finalX = workAreaWidth - gElToolbar.offsetWidth }
 
-            if (finalY < canvasY) {
-                finalY += (this.size * 2) + (gElToolbar.getBoundingClientRect().height) + 20
-            }
+            if (finalY < canvasY) { finalY += (this.size * 2) + (gElToolbar.getBoundingClientRect().height) + 20 }
 
             gElToolbar.style.left = finalX + 'px'
             gElToolbar.style.top = finalY + 'px'
@@ -463,6 +406,8 @@ function shapeWithToolbar() {
     return shape
 
 }
+
+
 
 function shapeWithToolbarClose() {
 
@@ -610,6 +555,10 @@ function shapeWithToolbarClose() {
 
 }
 
+
+
+
+
 function onAddText(ev) {
     ev.stopPropagation()
     ev.preventDefault()
@@ -647,6 +596,8 @@ function onClickedEditableText(el, event) {
     }
     renderCanvas()
 }
+
+
 
 function hideAllToolbars() {
     for (let i = 0; i < gShapesDrawn.length; i++) {
@@ -709,7 +660,6 @@ function onCenter(event) {
     gShapesDrawn[currentSelectedShapeIdx].textAlign = 'center'
     renderCanvas()
 }
-
 function onStrokeWidthChange(event) {
     var currentSelectedShapeIdx = getSelectedShapeIdx()
     gShapesDrawn[currentSelectedShapeIdx].strokeWidth = event.target.value
@@ -722,6 +672,9 @@ function onStrokeColorChange(event) {
     renderCanvas()
 }
 
+
+
+
 function hiddenByOther(id, x, y) {
     for (let i = id + 1; i < gShapesDrawn.length; i++) {
         if (gShapesDrawn[i].isClickedInHitBox(x, y)) {
@@ -730,6 +683,7 @@ function hiddenByOther(id, x, y) {
     }
     return false
 }
+
 
 function textShape(text = null, x = null, y = null, size = null, color = null) {
     var text = {
@@ -794,6 +748,7 @@ function textShape(text = null, x = null, y = null, size = null, color = null) {
     gShapesDrawn.push(text)
 }
 
+
 function imageShape(url = null, x = null, y = null, width = 100, height = 100) {
     var image = {
         img: new Image(),
@@ -855,6 +810,12 @@ function imageShape(url = null, x = null, y = null, width = 100, height = 100) {
     gShapesDrawn.push(image)
 }
 
+
+
+
+// TODO: move to  'Generic Shapes'
+
+
 function onShareOnFacebook(elLink, event) {
     return onUpload(elLink, event)
 }
@@ -870,6 +831,36 @@ function onDownload(elLink, event) {
     elLink.download = 'my-img'
 
 }
+
+function onClear(event) {
+    onInitMemeEditor()
+}
+
+function renderCanvas() {
+    drawCanvasFrame()
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].renderSelf()
+        gShapesDrawn[i].renderCallbacks()
+
+    }
+}
+
+function onEvent(ev) {
+    if (ev.type === 'mousemove') {
+        gElCanvas.style.cursor = 'default'
+    }
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        gShapesDrawn[i].trigger(ev)
+    }
+    if (ev.type === 'mousedown') {
+        gMouseDown = true
+    } else if (ev.type === 'mouseup') {
+        gMouseDown = false
+    }
+    renderCanvas()
+}
+
+
 //upload to social media
 function onUpload(el, event) {
     event.preventDefault()
@@ -897,6 +888,43 @@ function updateTextInputs() {
     }
 }
 
+function resetCanvas() {
+
+    renderCanvas()
+
+    // var selectedImg = getMemeImgId()
+    // const img = new Image()
+    // img.onload = () => { renderImg(img) }
+    // img.src = getImages(selectedImg)[0].url
+    //
+    // console.log('before texts', gBackgroundImg.width, gBackgroundImg.height)
+    // var canvasLength = gElCanvas.getBoundingClientRect().height
+
+
+
+    textShape('Top Text',
+        gElCanvas.width / 2,
+        70,
+        100,
+        'white')
+
+    textShape('Bottom Text',
+        gElCanvas.width / 2,
+        gElCanvas.height - (100) - 70,
+        100,
+        'white')
+
+    onInitEditableTexts()
+    updateTextInputs()
+    hideAllToolbars()    
+    renderCanvas()
+
+    // gShapesDrawn[0].y = 70
+    // var canvasLength = gElCanvas.getBoundingClientRect().height
+    // gShapesDrawn[1].y = canvasLength - (100) - 70
+
+}
+
 function onInitEditableTexts() {
     var elEditableText = document.querySelector('.editable-texts')
     var innerHTML = ''
@@ -911,6 +939,96 @@ function onInitEditableTexts() {
     }
     elEditableText.innerHTML = innerHTML
 }
+
+function resizeCanvas(){
+    const elContainer = document.querySelector('.canvas-container')
+    var oldCanvasX = gElCanvas.width
+    var oldCanvasY = gElCanvas.height
+    gElCanvas.width = elContainer.offsetWidth
+    gElCanvas.height = elContainer.offsetHeight
+
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        var currentShapeX = gShapesDrawn[i].x
+        var currentShapeY = gShapesDrawn[i].y
+        var currentShapeSize = gShapesDrawn[i].size
+
+        var newShapeX = currentShapeX / oldCanvasX * elContainer.offsetWidth
+        var newShapeY = currentShapeY / oldCanvasY * elContainer.offsetHeight
+        var newShapeSize = currentShapeSize / oldCanvasY * elContainer.offsetHeight
+
+        gShapesDrawn[i].x = newShapeX
+        gShapesDrawn[i].y = newShapeY
+        gShapesDrawn[i].size = newShapeSize
+    }
+}
+
+function resizeCanva1s() {
+    // console.log('resize')
+    const elContainer = document.querySelector('.canvas-container')
+    var oldCanvasX = gElCanvas.width
+    var oldCanvasY = gElCanvas.height
+
+    var canvasAspectRatio = gElCanvas.width / gElCanvas.height
+
+    if (gElCanvas.width > gElCanvas.height) {
+        // if (gElCanvas.width < elContainer.offsetWidth) {
+        gElCanvas.width = elContainer.offsetWidth
+        gElCanvas.height = elContainer.offsetWidth / canvasAspectRatio
+        // }
+    } else {
+        // if (gElCanvas.height < elContainer.offsetHeight) {
+        gElCanvas.height = elContainer.offsetHeight
+        gElCanvas.width = elContainer.offsetHeight * canvasAspectRatio
+        // }
+    }
+
+    // if (gElCanvas.width < elContainer.offsetWidth) {
+    //     gElCanvas.width = elContainer.offsetWidth
+    // }
+    // if (gElCanvas.height < elContainer.offsetHeight) {
+
+    // gElCanvas.width = elContainer.offsetWidth
+    // gElCanvas.height = elContainer.offsetHeight
+
+    for (let i = 0; i < gShapesDrawn.length; i++) {
+        var currentShapeX = gShapesDrawn[i].x
+        var currentShapeY = gShapesDrawn[i].y
+        var currentShapeSize = gShapesDrawn[i].size
+
+        var newShapeX = currentShapeX / oldCanvasX * elContainer.offsetWidth
+        var newShapeY = currentShapeY / oldCanvasY * elContainer.offsetHeight
+        var newShapeSize = currentShapeSize / oldCanvasY * elContainer.offsetHeight
+
+        gShapesDrawn[i].x = newShapeX
+        gShapesDrawn[i].y = newShapeY
+        gShapesDrawn[i].size = newShapeSize
+    }
+}
+
+function resizeAndRenderCanvas() {
+    resizeCanvas()
+    renderCanvas()
+}
+
+function onInitMemeEditor() {
+
+    const elContainer = document.querySelector('.canvas-container')
+    gElCanvas = document.querySelector('canvas')
+    gElCanvas.width = elContainer.offsetWidth
+    gElCanvas.height = elContainer.offsetHeight
+
+    gCtx = gElCanvas.getContext('2d')
+
+    gShapesDrawn = []
+
+    resetCanvas()
+
+    // console.log('1 on init editor, ', gElCanvas.width, gElCanvas.height)
+    renderCanvas()
+    // console.log('2 on init editor, ', gElCanvas.width, gElCanvas.height)
+
+}
+
 function renderStickers() {
     var elStickerModal = document.querySelector('.sticker-modal-grid')
     var strHTML = ''
@@ -957,13 +1075,3 @@ function onRemoveSticker(el, event) {
     renderCanvas()
     gElCloseToolbar.style.display = 'none'
 }
-
-
-
-
-
-
-
-
-
-

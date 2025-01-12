@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/main.css" />
     </head>
 
-    <body onload="onAppInit()" onresize="resizeAndRenderCanvas()">
+    <body onload="onAppInit()" onresize="resizeCanvas()">
 
 
         <div class="sticker-modal">
@@ -95,7 +95,7 @@
 
                         <button class="add-sticker" onclick="onOpenStickerModal()"> <i class="fa-solid fa-poo"> </i> Add Sticker</button>
 
-                        <button class="clear" onclick="onClear(event)">Clear</button>
+                        <button class="clear" onclick="resetCanvas()">Clear</button>
 
                     </div>
 
